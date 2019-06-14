@@ -20,7 +20,8 @@
     "pages/recharge/recharge",
     "pages/goods/goods",
     "pages/pointsfor/pointsfor",
-    "pages/chooseStore/chooseStore"
+    "pages/chooseStore/chooseStore",
+    "pages/spellOrdering/spellOrdering"
   ],
   "tabBar": {
     "color": "#a9b7b7",

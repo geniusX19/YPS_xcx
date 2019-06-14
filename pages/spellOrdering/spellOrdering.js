@@ -17,50 +17,51 @@ Page({
     index: 0, //支付方式 0 余额支付 1微信支付
     arrays: ['到店自提', '快递', '壹配送'],
     indexs: 0,  //获取可选配送方式的索引
-    isCartPay: true,
+    isCartPay: false,
     infoOrder: {},
-    num: 1, //详情页进来的数量为1
-    totalNum: 1,
+    num: 1, //
     productId: '',// 页面商品信息
     canUseCouponCounBOl: true,
     couponId: '',
-    deliveryType: ["ZT",'POST','YPS'], //YPS壹配送到家  ZT自提 POST邮寄
+    deliveryType: ["ZT", 'POST', 'YPS'], //YPS壹配送到家  ZT自提 POST邮寄
     payType: ["WX", "REMAIN"], //REMAIN 余额支付  WX 微信
     remarks: '',//备准信息
-    addressId: "", //收货地址
     userInfo: {}, //用户信息
     addressDetailList: [], //获取全部的门店地址
     shopAddressId: '', //门店的id
-    
-    // 门店信息
-    productInfoList:[],
-    
+    addressId: "", //收货地址
+    isAddGroup: false, //拼团标记  true为进入别的拼团 其他都为false
+    taskId: "", //获取任务id
+
+    // 拼团商品信息
+    productInfo: {},
+
   },
   //获取用户默认地址
   getAddressData() {
     let _this = this;
     Api.loadDefaultAddress().then(res => {
-      console.log(res)
-      if(res.code == 2000){
-        if (res.data == undefined){
-            wx.showModal({
-              title: '',
-              content: '没有填写默认地址，请去填写默认地址',
-              success(res) {
-                if (res.confirm) {
-                  //console.log('用户点击确定')
-                  wx.navigateTo({
-                    url: '/pages/addresses/addresses',
-                  })
-                } else if (res.cancel) {
-                  //console.log('用户点击取消')
-                  wx.navigateBack({
-                    
-                  })
-                }
-              } 
-            })
-        }else{
+      //console.log(res)
+      if (res.code == 2000) {
+        if (res.data == undefined) {
+          wx.showModal({
+            title: '',
+            content: '没有填写默认地址，请去填写默认地址',
+            success(res) {
+              if (res.confirm) {
+                //console.log('用户点击确定')
+                wx.navigateTo({
+                  url: '/pages/addresses/addresses',
+                })
+              } else if (res.cancel) {
+                //console.log('用户点击取消')
+                wx.navigateBack({
+
+                })
+              }
+            }
+          })
+        } else {
           _this.setData({
             userInfo: res.data
           })
@@ -69,135 +70,98 @@ Page({
     })
   },
 
-  getData(){
+  getData() {
     let _this = this;
-    let data = {
-      "isCartPay": _this.data.isCartPay,
-      "cartItemDtoList": _this.data.productInfoList,
-      "goodsId": _this.data.productId,
-      "num": _this.data.num
-    }
-    Api.generateOrder(data).then(res => {
-      if(res.code == 2000 ){
-        let arr = res.data
-        let totalNum = 0;
-        for(let i  = 0; i < arr.length; i++){
-          totalNum += arr[i].num
-        }
+    Api.loadSpellTemplate(_this.data.templateId).then(res => {
+     // console.log(res)
+      if (res.code == 2000) {
         _this.setData({
-          productInfoList: arr,
-          totalNum: totalNum,
+          productInfo: res.data,
         })
-        
+
       }
     })
   },
   getData1() {
     let _this = this;
     let data = {
-      "shopAddressId": _this.data.shopAddressId,//门店地址
+      "isAddGroup": _this.data.isAddGroup,//是否是加入拼团的(拼团  限时:false)
+      "templateId": _this.data.templateId, //模板id
+      "shopAddressId": _this.data.shopAddressId, //门店地址id
       "couponId": _this.data.couponId,//优惠券ID
       "addressId": _this.data.userInfo.id,//收货地址
       "deliveryType": _this.data.deliveryType[_this.data.indexs],//配送方式
-      "isCartPay": _this.data.isCartPay,//购物车进入标记
-      "cartItemDtoList": _this.data.productInfoList,
-      "goodsId": _this.data.productId,
-      "num": _this.data.num
+      "goodsId": _this.data.productId,  
+      "num": _this.data.num,
+      "taskId": _this.data.taskId, //任务id
     }
-    Api.previewOrder(data).then(res => {
-     console.log(res)
+    Api.assemblePaymentPreview(data).then(res => {
       if (res.code == 2000) {
         _this.setData({
           infoOrder: res.data,
-          canUseCouponCounBOl: res.data.canUseCouponCount == 0 ? true : false
+          canUseCouponCounBOl: res.data.priceModel.couponDiscountMoney == 0 ? true : false
         })
       }
     })
   },
 
   //减法
-  reduceClick(e){
+  reduceClick(e) {
     let _this = this;
-    let index = e.currentTarget.dataset.index;
-    let arr = _this.data.productInfoList;
-    if (arr[index].num <= 1){
-      arr[index].num = 1
+    if (_this.data.num <= 1){
+      _this.setData({
+        num: 1
+      })
       return;
     }
-    arr[index].num --;
-    if (_this.data.isCartPay){
-      //购物车进来的
-      //购物车进来的
-      _this.setData({
-        productInfoList: arr,
-      })
-      
-    }else{
-      //详情页进来的
-      _this.setData({
-        num: arr[index].num,
-        productInfoList: arr
-      })
-      _this.getData();
-      
-      _this.getData1()
-    }
+    _this.setData({
+      num: _this.data.num-1
+    })
+    _this.getData();
+    _this.getData1()
   },
 
- 
+
 
   //加法
-  addClick(e){
+  addClick(e) {
     let _this = this;
-    let index = e.currentTarget.dataset.index;
-    let arr = _this.data.productInfoList;
-    arr[index].num++;
-    if (_this.data.isCartPay) {
-      //购物车进来的
-      _this.setData({
-        productInfoList: arr,
-      })
-    } else {
-      //详情页进来的
-      _this.setData({
-        num: arr[index].num,
-        productInfoList: arr
-      })
-    }
+    _this.setData({
+      num: _this.data.num+1
+    })
     _this.getData();
-    
     _this.getData1()
   },
 
   //支付订单提交
-  paymentClick(){
+  paymentClick(e) {
     let _this = this;
-
-    if (_this.data.infoOrder.priceModel.finalMoney == 0){
+    _this.setData({
+      formId: e.detail.formId
+    })
+    if (_this.data.infoOrder.priceModel.finalMoney == 0) {
       _this.setData({
         index: 0,
       })
     }
-
-    _this.getData1()
-
-
+    _this.getData1();
     let data = {
+      "isAddGroup": _this.data.isAddGroup,
+      "templateId": _this.data.templateId,
+      "taskId": _this.data.taskId,
       "shopAddressId": _this.data.shopAddressId,
       "couponId": _this.data.couponId,
-      "addressId": _this.data.userInfo.id,
-      "deliveryType": _this.data.deliveryType[_this.data.indexs],//配送方式
-      "isCartPay": _this.data.isCartPay,//购物车进入标记
-      "cartItemDtoList": _this.data.productInfoList,
-      "goodsId": _this.data.productId,
+      "addressId": _this.data.shopAddressId,
+      "deliveryType": _this.data.deliveryType[_this.data.indexs],
+      "goodsId": _this.data.goodsId,
       "num": _this.data.num,
+      "formId": _this.data.formId,
       "payType": _this.data.payType[_this.data.index],
       "needInvoice": false, //是否需要发票
-      remarks: _this.data.remarks
+      "remarks": _this.data.remarks
     }
-    //console.log(_this.data.infoOrder.priceModel.canUseRemainPay)
-   // console.log(_this.data.infoOrder.priceModel.financeRemain)
-    if(_this.data.index == 1){  //余额支付
+    if (_this.data.index == 1) {  //余额支付
+      // console.log("余额支付")
       if (!(_this.data.infoOrder.priceModel.canUseRemainPay)) { //判断是否可以余额支付 
         wx.showToast({
           title: '您的余额不足',
@@ -206,12 +170,12 @@ Page({
           wx.hideToast()
         }, 1000)
         return false;
-      }else {  //可以余额支付
-        Api.payment(data).then(res => {
+      } else {  //可以余额支付
+        Api.createPreviewOrder(data).then(res => {
           //console.log(res)
           if (res.code == 2000) {
             let data = res.data;
-            console.log(data)
+           // console.log(data)
             wx.showModal({
               content: '账户余额：¥' + _this.data.infoOrder.priceModel.financeRemain + "\r\n当前支付：¥" + data.priceModel.finalMoney,
               success(res) {
@@ -220,12 +184,10 @@ Page({
                   // let data1 = {
                   //   billId: data.bill.id
                   // }
-                  Api.balancePayment(data.bill.id).then(res => {
+                  Api.paymentAssemble(data.bill.id).then(res => {
                     //console.log(res)
-                    if(res.code = 2000){
-                      wx.redirectTo({
-                        url: '/pages/order/order?current=3',
-                      })
+                    if (res.code = 2000) {
+                      wx.navigateBack({})
                     }
                   })
                 } else if (res.cancel) {
@@ -234,18 +196,17 @@ Page({
                     url: '/pages/order/order?current=1',
                   })
                 }
-                app.globalData.shoppingData = 0;
-                app.loadCartNum();
               }
             })
           }
-         
+
         })
       }
-      
 
-    }else {
-      Api.payment(data).then(res => {
+
+    } else {
+     // console.log("微信支付")
+      Api.createPreviewOrder(data).then(res => {
         //console.log(res)
         if (res.code == 2000) {
           let payString = JSON.parse(res.data.bill.payString);
@@ -258,9 +219,7 @@ Page({
             paySign: payString.paySign,
             success(res) {
               //console.log(111)
-              wx.redirectTo({
-                url: '/pages/order/order?current=3',
-              })
+              wx.navigateBack({})
             },
             fail(res) {
               wx.redirectTo({
@@ -271,8 +230,8 @@ Page({
         }
       })
     }
-    
-   
+
+
   },
 
   /**
@@ -280,33 +239,27 @@ Page({
    */
   onLoad: function (options) {
     let _this = this;
-   
-    if(options.id != undefined){
+    //console.log(options)
+    if (options.taskId != undefined) {
       _this.setData({
-        productId: options.id,
-        isCartPay: false
+        taskId: options.taskId,
       })
     };
-    
-    try {
-      var value = wx.getStorageSync('cartItemDtoList')
-      if (value) {
-        // Do something with return value
-        _this.setData({
-          productInfoList: value
-        });
-      }
-    } catch (e) {
-      // Do something when catch error
-    }
+    if (options.id != undefined && options.isAddGroup != undefined) {
+      _this.setData({
+        productId: options.goodsId,
+        isAddGroup: options.isAddGroup,
+        templateId: options.id,
+      })
+    };
     _this.setData({
       navH: app.globalData.navHeight
     });
-    
 
-    
+
+
   },
-   //获取门店
+  //获取门店
 
 
 
@@ -316,7 +269,7 @@ Page({
     _this.setData({
       remarks: e.detail.value,
     })
-  }, 
+  },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
@@ -331,13 +284,16 @@ Page({
   onShow: function () {
     let _this = this;
     _this.getAddressData()
-    if(_this.data.select == 1){
+    if (_this.data.select != 0) {
+      
       //默认是到点自取
       _this.setData({
         deliveryType: ["ZT"],
         arrays: ['到店自提'],
       })
-    }
+    } 
+
+
     try {
       var value = wx.getStorageSync('store')
       if (value) {
@@ -351,29 +307,19 @@ Page({
       // Do something when catch error
     }
 
-    //console.log(this.data.couponId)
-    try {
-      var value = wx.getStorageSync('cartItemDtoList')
-      if (value) {
-        // Do something with return value
-        _this.setData({
-          productInfoList: value
-        });
-      }
-    } catch (e) {
-      // Do something when catch error
-    }
+   
     //默认选择门店的第一个
     _this.data.addressDetailList[0].selected = true;
     _this.setData({
       addressDetailList: _this.data.addressDetailList,
       shopAddressId: _this.data.addressDetailList[0].id
     })
-    
+
 
     _this.getData();
-
-    _this.getData1()
+    
+    
+    _this.getData1();
   },
 
   /**
@@ -418,27 +364,27 @@ Page({
   /**
    * 订单类型切换
    */
-  orderTypeSwitch:function(e){
+  orderTypeSwitch: function (e) {
     //YPS壹配送到家  ZT自提 POST邮寄
-    let index  = e.currentTarget.dataset.index;
+    let index = e.currentTarget.dataset.index;
     let _this = this;
     //deliveryType: ["ZT", 'POST', 'YPS'], //YPS壹配送到家  ZT自提 POST邮寄
-    if(index == 0){
+    if (index == 0) {
       //获取默认地址
       _this.getAddressData()
-      if (_this.data.addressDetailList[0].city == _this.data.userInfo.city){
+      if (_this.data.addressDetailList[0].city == _this.data.userInfo.city) {
         _this.setData({
           deliveryType: ['POST', 'YPS'],
           arrays: ['快递', '壹配送'],
         })
-      }else{
+      } else {
         _this.setData({
           deliveryType: ['POST'],
           arrays: ['快递'],
         })
       }
-     
-    }else if(index == 1){
+
+    } else if (index == 1) {
       _this.setData({
         deliveryType: ["ZT"],
         arrays: ['到店自提'],
@@ -452,9 +398,9 @@ Page({
   /**
    * 门店选择
    */
-  catchSelect:function(e) {
+  catchSelect: function (e) {
     var _this = this;
-    for (let i = 0; i < _this.data.addressDetailList.length; i ++){
+    for (let i = 0; i < _this.data.addressDetailList.length; i++) {
       _this.data.addressDetailList[i].selected = false;
     }
     _this.data.addressDetailList[e.currentTarget.dataset.index].selected = true;
@@ -467,7 +413,7 @@ Page({
   /**
    * 选择支付方式
    */
-  bindPickerChange:function(e){
+  bindPickerChange: function (e) {
     var _this = this;
     //console.log(e.detail.value);
     _this.setData({
@@ -483,7 +429,6 @@ Page({
     _this.setData({
       indexs: e.detail.value
     })
-    
-    _this.getData1()
+    _this.getData1();
   },
 })

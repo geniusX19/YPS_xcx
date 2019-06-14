@@ -104,16 +104,37 @@ Page({
   /**
    * 加入购物车
    */
-  addCart: function () {
+  // addCart: function () {
+  //   wx.showLoading({
+  //     title: '加载中！',
+  //   })
+  //   var _this = this;
+  //   let navbar = this.navbar;
+  //   app.addCart(1).then((res) => {
+  //     // navbar.cartNumUp();
+  //     console.log(res);
+  //     console.log(app.globalData.shoppingData)
+  //     wx.hideLoading();
+  //   })
+  // },
+  /**
+   * 增加购物车
+   */
+  addCart: function (e) {
     wx.showLoading({
       title: '加载中！',
     })
     var _this = this;
-    let navbar = this.navbar;
-    app.addCart(1).then((res) => {
-      // navbar.cartNumUp();
+    var data = {
+      goodsId: e.currentTarget.dataset.id,
+      num: 1
+    };
+    app.addCart(data).then((res) => {
+      //_this.priceCount();
       console.log(res);
-      console.log(app.globalData.shoppingData)
+      _this.setData({
+        cartList: res
+      })
       wx.hideLoading();
     })
   },

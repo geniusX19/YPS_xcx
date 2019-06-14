@@ -36,6 +36,9 @@
           <view class='orderPage_tit_right'   wx:if='{{item.order.orderStatus === "WAITRECEIVE"}}'>
             <text class='orderPage_tit_right_item'>待收货</text>
           </view>
+          <view class='orderPage_tit_right'   wx:if='{{item.order.orderStatus === "EVALUATE"}}'>
+            <text class='orderPage_tit_right_item'>完成订单</text>
+          </view>
 
 
         </view>
@@ -67,9 +70,9 @@
           <view style='border: 1rpx solid #666666;' wx:if='{{item.order.orderStatus === "UNPAYED"}}' data-index="{{index}}" catchtap="cancelOrderClick" >
             取消订单
           </view>
-          <view style='border: 1rpx solid #41BA53;color:#41BA53;margin-left:30rpx;' data-index="{{index}}" wx:if="{{item.order.orderStatus === 'UNPAYED'}}">付款</view>
+          <view style='border: 1rpx solid #41BA53;color:#41BA53;margin-left:30rpx;' catchtap='paymentClick' data-index="{{index}}" wx:if="{{item.order.orderStatus === 'UNPAYED'}}">付款</view>
           <view style='border: 1rpx solid #41BA53;color:#41BA53;margin-left:30rpx;' data-index="{{index}}" catchtap='refundClick'  wx:if="{{item.order.orderStatus === 'WAITSEND'}}">申请退款</view>
-          <view style='border: 1rpx solid #41BA53;color:#41BA53;margin-left:30rpx;' data-index="{{index}}" wx:if="{{item.order.orderStatus === 'WAITRECEIVE'}}">确认收货</view>
+          <view style='border: 1rpx solid #41BA53;color:#41BA53;margin-left:30rpx;' catchtap='receivingGoodsClick' data-index="{{index}}" wx:if="{{item.order.orderStatus === 'WAITRECEIVE'}}">确认收货</view>
         </view>
       </view>
     </scroll-view>

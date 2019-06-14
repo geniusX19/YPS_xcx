@@ -1,4 +1,4 @@
-<!--pages/ordering/ordering.wxml-->
+<!--pages/spellOrdering/spellOrdering.wxml-->
 
 <!-- 引入公共模板 -->
 <import src="/pages/template/space/space.wxml" />
@@ -62,18 +62,20 @@
       </view>
       <!-- 商品信息 -->
       <view class='ordering_info'>
-        <view class='ordering_Product' wx:for='{{productInfoList}}'  wx:key='item'>
+        <view class='ordering_Product'>
           <view class='ordering_Product_img'>
-            <image src='{{item.image}}'></image>
+            <image src='{{productInfo.goods.defaultImage}}'></image>
           </view>
           <view class='ordering_Product_item'>
-            <view class='ordering_Product_tit'>{{item.title}}</view>
+            <view class='ordering_Product_tit'>{{productInfo.goods.title}}</view>
             <view class='ordering_Product_price'>
-              <view class='product_price'>￥{{item.price}}</view>
-              <view class='product_num'>x{{item.num}}</view>
+              <view class='product_price' wx:if="{{productInfo.spellType === 'GROUP' && isAddGroup}}">￥{{productInfo.spellPrice}}</view>
+              <view class='product_price' wx:if="{{productInfo.spellType === 'GROUP' && !isAddGroup}}">￥{{productInfo.spellLeaderPrice}}</view>
+              <view class='product_price' wx:if="{{productInfo.spellType != 'GROUP'}}">￥{{productInfo.spellPrice}}</view>
+              <view class='product_num'>x{{num}}</view>
               <view class='buy_num'>
                 <view catchtap='reduceClick' data-index='{{index}}' style='border-right:1rpx solid #E6E6E6'>-</view>
-                <view>{{item.num}}</view>
+                <view>{{num}}</view>
                 <view catchtap='addClick' data-index='{{index}}' style='border-left:1rpx solid #E6E6E6'>+</view>
               </view>
             </view>
@@ -149,7 +151,10 @@
       <view class='location_statistical'>合计：
         <text>¥{{infoOrder.priceModel.finalMoney}}</text>
       </view>
-      <view catchtap='paymentClick' class='location_button'>提交订单</view>
+      <form report-submit="{{true}}" bindsubmit="paymentClick">
+        <button class='location_button' formType="submit" type="primary">提交订单</button>
+        <!-- <view catchtap='paymentClick' class='location_button'>提交订单</view> -->
+      </form>
     </view>
 
   </view>

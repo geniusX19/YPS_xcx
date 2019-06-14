@@ -14,9 +14,10 @@ Page({
    */
   data: {
     navH: null, // 用户手机导航高度
-    currentArry: [{
+    currentArry: [
+      {
         text: "全部订单"
-    }, {
+      }, {
         text: "待付款"
       }, {
         text: "拼团中"
@@ -49,6 +50,144 @@ Page({
     orderIndex: "", //删除申请退款的数据索引
   },
 
+  //付款按钮
+  paymentClick(e){
+    let _this = this;
+    let index = e.currentTarget.dataset.index;
+    let arr = _this.data.orderList;
+    let id = _this.data.orderList[index].order.id;
+    Api.paymentOrder(id).then(res => {
+      
+      if (res.code == 2000) {
+        // if (_this.data.currentTab == 1) {  //待付款
+        //   arr.splice(index, 1)
+        // } else if (_this.data.currentTab == 0) {    //全部订单操作 不能直接删除数据
+        //   arr[index].order.orderStatus = "WAITSEND"
+        // }
+        // _this.setData({
+        //   orderList: arr,
+        // })
+        let data = res.data;
+        console.log(res)
+        if (data.priceModel.totalMoney == 0){
+          data.bill.payType = "REMAIN"
+        }
+        if (data.bill.payType == "REMAIN"){ //余额支付 
+          if (data.orderType == "GOODS_PAY"){  //普通订单
+            wx.showModal({
+              title: "余额支付",
+              content: "当前支付：¥" + data.priceModel.totalMoney,
+              success(res) {
+                if (res.confirm) {
+                  //console.log('用户点击确定')
+                  // let data1 = {
+                  //   billId: data.bill.id
+                  // }
+                  Api.balancePayment(data.bill.id).then(res => {
+                    //console.log(res)
+                    if (res.code = 2000) {
+                      if (_this.data.currentTab == 1) {  //待付款
+                        arr.splice(index, 1)
+                      } else if (_this.data.currentTab == 0) {    //全部订单操作 不能直接删除数据
+                        arr[index].order.orderStatus = "WAITSEND"
+                      }
+                      _this.setData({
+                        orderList: arr,
+                      })
+                    }
+                  })
+                } else if (res.cancel) {
+                  //console.log('用户点击取消')
+                  
+                }
+               
+              }
+            })
+            
+          }else{ //拼团订单
+            wx.showModal({
+              title: "余额支付",
+              content: "当前支付：¥" + data.priceModel.totalMoney,
+              success(res) {
+                if (res.confirm) {
+                  //console.log('用户点击确定')
+                  // let data1 = {
+                  //   billId: data.bill.id
+                  // }
+                  Api.paymentAssemble(data.bill.id).then(res => {
+                    //console.log(res)
+                    if (res.code = 2000) {
+                      if (_this.data.currentTab == 1) {  //待付款
+                        arr.splice(index, 1)
+                      } else if (_this.data.currentTab == 0) {    //全部订单操作 不能直接删除数据
+                        arr[index].order.orderStatus = "WAITSEND"
+                      }
+                      _this.setData({
+                        orderList: arr,
+                      })
+                    }
+                  })
+                } else if (res.cancel) {
+                  //console.log('用户点击取消')
+                }
+              }
+            })
+
+          }
+        }else{  //微信支付
+          let payString = JSON.parse(data.bill.payString);
+          //console.log(typeof payString)
+          wx.requestPayment({
+            timeStamp: payString.timeStamp,
+            nonceStr: payString.nonceStr,
+            package: payString.package,
+            signType: payString.signType,
+            paySign: payString.paySign,
+            success(res) {
+              if (_this.data.currentTab == 1) {  //待付款
+                arr.splice(index, 1)
+              } else if (_this.data.currentTab == 0) {    //全部订单操作 不能直接删除数据
+                arr[index].order.orderStatus = "WAITSEND"
+              }
+              _this.setData({
+                orderList: arr,
+              })
+            },
+            fail(res) {
+             
+            }
+          })
+        }
+
+      }
+    })
+  }, 
+
+  //待收货
+  receivingGoodsClick(e){
+    let _this = this;
+    let index = e.currentTarget.dataset.index;
+    let arr = _this.data.orderList;
+    let id = _this.data.orderList[index].order.id;
+    console.log(id)
+    Api.receivingGoods(id).then(res => {
+      console.log(res)
+      if (res.code = 2000) {
+        wx.showToast({
+          title: '已收货',
+          duration: 2000,
+        })
+        if (_this.data.currentTab == 4) {  //待收货
+          arr.splice(index, 1)
+        } else if (_this.data.currentTab == 0) {    //全部订单操作 不能直接删除数据
+          arr[index].order.orderStatus = "EVALUATE"
+        }
+        _this.setData({
+          orderList: arr,
+        })
+      }
+    })
+  },
   //取消订单
   cancelOrderClick(e){
     let _this = this;
@@ -57,6 +196,10 @@ Page({
     let id = _this.data.orderList[index].order.id;
     Api.cancelOrder(id).then(res => {
       if(res.code = 2000){
+        wx.showToast({
+          title: '已取消订单',
+          duration: 2000,
+        })
         if (_this.data.currentTab == 1){
           arr.splice(index, 1)
         } else if (_this.data.currentTab == 0){    //全部订单操作 不能直接删除数据

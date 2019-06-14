@@ -400,11 +400,10 @@ module.exports = {
   },
 
   //余额支付
-  balancePayment: (data) => {
+  balancePayment: (billId) => {
     return request({
-      url: `/member/order/common/confirm/remain/${data.billId}`,
+      url: `/member/order/common/confirm/remain/${billId}`,
       method: 'POST',
-      data: data
     })
   },
 
@@ -435,6 +434,28 @@ module.exports = {
       url: `/member/order/application`,
       method: 'POST',
       data: data,
+    })
+  },
+
+  //待收货接口
+  receivingGoods: (orderId) => {
+    return request({
+      url: `/member/order/receive/${orderId}`,
+      method: 'POST',
+    })
+  },
+  //订单付款接口
+  paymentOrder: (orderId) => {
+    return request({
+      url: `/member/order/pay/${orderId}`,
+      method: 'POST',
+    })
+  },
+  //拼团支付接口
+  paymentAssemble: (orderId) => {
+    return request({
+      url: `/member/spell/task/confirm/remain/${orderId}`,
+      method: 'POST',
     })
   },
 

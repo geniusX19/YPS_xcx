@@ -23,6 +23,8 @@ Page({
     productLists: [],// 输入框查询结果列表
     _formIndexByQuery:false,//首页查询标识
     _formIndexContent:'',//从首页过来的查询内容
+    page: 1, //分页
+    size: 10, //展示10条
   },
 
   /**
@@ -48,7 +50,9 @@ Page({
     console.log(app.globalData.sortCurrent)
     _this.setData({
       navH: app.globalData.navHeight,
-      currentTab: app.globalData.sortCurrent
+      currentTab: app.globalData.sortCurrent,
+      productList: [],
+      page: 1,
     });
     // 购物车商品数量展示
     wx.setTabBarBadge({
@@ -88,7 +92,10 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function() {
-
+      let _this = this;
+      _this.setData({
+        page: _this.data.page+1,
+      })
   },
 
   /**
@@ -104,9 +111,8 @@ Page({
   loadAllCategory:function(){
     var _this = this;
     Api.loadAllCategory().then(res => {
-      console.log(res);
       _this.setData({
-        sortList: res.data
+        sortList: res.data,
       })
       var data = {
         "categoryId": _this.data.sortList[app.globalData.sortCurrent].id,
@@ -114,7 +120,9 @@ Page({
         "isDel": false,
         "sort": "desc"
       }
-      console.log(data)
+      _this.setData({
+        productList: [],
+      })
       _this.loadCategory(data);
     })
   },
@@ -124,19 +132,19 @@ Page({
    */
   loadCategory:function(data){
     var _this = this;
-    console.log(data);
-    Api.loadCategory(data,1,2).then(res => {
-      console.log(res);
+    //console.log(data);
+    Api.loadCategory(data,_this.data.page,_this.data.size).then(res => {
+      //console.log(res);
       if(_this.data.inputSearch){
         _this.setData({
-          productLists: [],
-          productLists: res.data.dataList
+         // productLists: [],
+          productLists: _this.data.productLists.concat(res.data.dataList),
         })
       }else{
         if (res.data.dataList.length > 0){
           _this.setData({
-            productList: [],
-            productList: res.data.dataList,
+            //productList: [],
+            productList: _this.data.productList.concat(res.data.dataList),
             isHide: false
           })
         }else{
@@ -180,11 +188,19 @@ Page({
     var _this = this;
     _this.setData({
       productLists: [],
+      productList: [],
       inputSearch: false,
       inputValue: null,
       _formIndexByQuery:false
     })
-    app.globalData.queryData = null
+    app.globalData.queryData = null;
+    var data = {
+      "categoryId": _this.data.sortList[app.globalData.sortCurrent].id,
+      "title": '',
+      "isDel": false,
+      "sort": "desc"
+    }
+    _this.loadCategory(data);
   },
 
   /**
@@ -196,7 +212,9 @@ Page({
     app.globalData.sortCurrent = num;
     _this.setData({
       currentTab: num,
-      currentItem: _this.data.sortList[num].title
+      currentItem: _this.data.sortList[num].title,
+      productList: [],
+      page: 1,
     })
     var data = {
       "categoryId": _this.data.sortList[num].id,
@@ -204,6 +222,7 @@ Page({
       "isDel": false,
       "sort": "desc"
     }
+    console.log(num)
     console.log(_this.data.currentItem,data);
     _this.loadCategory(data);
   },

@@ -7,8 +7,8 @@ var util = require("../../utils/util.js");
 //引入页面api
 import Api from '../../utils/api';
 
-var page = 1;// 页码
-var size = 3;// 页面加载条数
+var page = 1; // 页码
+var size = 10; // 页面加载条数
 var countdownClear = null;
 Page({
 
@@ -16,49 +16,28 @@ Page({
    * 页面的初始数据
    */
   data: {
-    navH: null,// 用户手机导航高度
-    navTitName: null,// 顶部导航栏名称
-    loadFlag: '',// 加载页面商品信息标识
-    tabshow: 0,// 用于控制切换商品和详情
-    countdown: '',// 秒杀倒计时
-    spellCountdown: [],// 拼团倒计时
-    productId: null,// 所需加载商品的id
-    totalPage: null,// 当前页面数据总页数
-    product: {},// 页面商品信息
-    productCarousel: [],// 商品轮播
-    shareViewOpen: false,// 分享框显示标识
-    showDialog: false,// 分享大图视图框
-    imgHide:false, //分享图显示隐藏标识
-    srcOne:'',
-    imgList:[],
-    spellteam: [
-      {
-        spellNum: 3,
-        spellPrice: 28.00,
-        personName: '3987丶奋斗',
-        limitNum: 6,
-        remaining: '剩余01天17时00分18秒'
-      }, {
-        spellNum: 3,
-        spellPrice: 28.00,
-        personName: '3987丶奋斗',
-        limitNum: 6,
-        remaining: '剩余01天17时00分18秒'
-      }, {
-        spellNum: 3,
-        spellPrice: 28.00,
-        personName: '3987丶奋斗',
-        limitNum: 6,
-        remaining: '剩余01天17时00分18秒'
-      }
-    ],// 拼团队伍列表
+    navH: null, // 用户手机导航高度
+    navTitName: null, // 顶部导航栏名称
+    loadFlag: '', // 加载页面商品信息标识
+    tabshow: 0, // 用于控制切换商品和详情
+    countdown: '', // 秒杀倒计时
+    spellCountdown: [], // 拼团倒计时
+    productId: null, // 所需加载商品的id
+    totalPage: null, // 当前页面数据总页数
+    product: {}, // 页面商品信息
+    productCarousel: [], // 商品轮播
+    shareViewOpen: false, // 分享框显示标识
+    showDialog: false, // 分享大图视图框
+    percentage: 0, //已抢占百分比,
+    numTotal: 0, //总条数
+    popupSpell: false, //展示全部拼团订单 最多为10条
     imgUrls: {
       url: 'https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/product/%E5%9B%BE%E5%B1%82%20160%402x.png'
     },
-    userInfo:{},//用户信息
+    userInfo: {}, //用户信息
     portrait_temp: null, //头像
-    wxName:null,//昵称
-    bgPath: '/imgs/background.png',  //背景
+    wxName: null, //昵称
+    bgPath: '/imgs/background.png', //背景
     qrcode_temp: '/imgs/qr.png', //二维码
     windowWidth: null, //图片宽度
     windowHeight: 1334, //图片高度
@@ -70,10 +49,10 @@ Page({
   onLoad: function (options) {
     let _this = this;
     _this.setData({
-      navH: app.globalData.navHeight,// 获取顶部导航栏高度
+      navH: app.globalData.navHeight, // 获取顶部导航栏高度
       userInfo: app.globalData.userInfo,
-      windowWidth:wx.getSystemInfoSync().windowWidth,
-      windowHeight:wx.getSystemInfoSync().windowHeight,
+      windowWidth: wx.getSystemInfoSync().windowWidth,
+      windowHeight: wx.getSystemInfoSync().windowHeight,
     })
 
     wx.showShareMenu({
@@ -89,21 +68,21 @@ Page({
             loadFlag: 'product',
           })
           break;
-        // 限时拼团
+          // 限时拼团
         case '1':
           _this.setData({
             navTitName: '拼团',
             loadFlag: 'spell',
           })
           break;
-        // 限时秒杀
+          // 限时秒杀
         case '2':
           _this.setData({
             navTitName: '秒杀',
             loadFlag: 'limit',
           })
           break;
-        // 会员热卖
+          // 会员热卖
         case '3':
           _this.setData({
             navTitName: '会员',
@@ -112,38 +91,18 @@ Page({
           break;
       }
     }
-    if(options.id != undefined){
+    if (options.id != undefined) {
       _this.setData({
-        productId: options.id
+        productId: options.id //goodsId
       })
     }
-    console.log(options.id,options.flag,typeof(options.flag));
   },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-    var _this = this; 
-    if (_this.data.loadFlag == 'product'){
-      this.buttom = this.selectComponent('#buttom');// 页面初次渲染完成后，使用选择器选择组件实例节点，返回匹配到组件实例对象
-      let myComponent = this.buttom;
-      myComponent.cartNumUp(app.globalData.shoppingData);// 调用自定义组件中的方法
-    }
-    console.log('页面加载所需要的id', _this.data.productId, _this.data.loadFlag)
-    switch(_this.data.loadFlag){
-      case 'spell':
-      case 'limit':
-        _this.loadSpellTemplate(_this.data.productId);
-        console.log('执行拼团');
-        break;
-      case 'product':
-        _this.loadProduct(_this.data.productId);
-        console.log('执行商品查询');
-        break;
-      
 
-    }
   },
 
   /**
@@ -151,6 +110,25 @@ Page({
    */
   onShow: function () {
     var _this = this;
+    if (_this.data.loadFlag == 'product') {
+      this.buttom = this.selectComponent('#buttom'); // 页面初次渲染完成后，使用选择器选择组件实例节点，返回匹配到组件实例对象
+      let myComponent = this.buttom;
+      myComponent.cartNumUp(app.globalData.shoppingData); // 调用自定义组件中的方法
+    }
+    //console.log('页面加载所需要的id', _this.data.productId, _this.data.loadFlag)
+    switch (_this.data.loadFlag) {
+      case 'spell':
+
+      case 'limit':
+        _this.loadSpellTemplate(_this.data.productId);
+        console.log('秒杀');
+        break;
+      case 'product':
+        _this.loadProduct(_this.data.productId);
+        console.log('执行商品查询');
+        break;
+    }
+
     console.log("====获取用户信息=====")
     console.log(_this.data.userInfo)
     console.log(_this.data.userInfo.avatarUrl)
@@ -158,16 +136,22 @@ Page({
     console.log(_this.data.windowWidth)
     console.log(_this.data.windowHeight)
     console.log("====END=====")
+
     // 检索是否收藏该商品
     Api.searchCollection(_this.data.productId).then(res => {
       console.log(res);
-      if(res.data){
-        this.buttom = this.selectComponent('#buttom');// 页面初次渲染完成后，使用选择器选择组件实例节点，返回匹配到组件实例对象
+      if (res.data) {
+        this.buttom = this.selectComponent('#buttom'); // 页面初次渲染完成后，使用选择器选择组件实例节点，返回匹配到组件实例对象
         let myComponent = this.buttom;
-        myComponent.settingCollection();// 调用自定义组件中的方法
+        myComponent.settingCollection(); // 调用自定义组件中的方法
       }
     })
   },
+
+
+  /**
+   * 生命周期函数--监听页面显示
+   */
 
   /**
    * 生命周期函数--监听页面隐藏
@@ -220,18 +204,18 @@ Page({
   /**
    * 加入购物车
    */
-  addCart:function(){
-    this.buttom = this.selectComponent('#buttom');// 页面初次渲染完成后，使用选择器选择组件实例节点，返回匹配到组件实例对象
+  addCart: function () {
+    this.buttom = this.selectComponent('#buttom'); // 页面初次渲染完成后，使用选择器选择组件实例节点，返回匹配到组件实例对象
     let myComponent = this.buttom;
-    myComponent.addCart();// 调用自定义组件中的方法
+    myComponent.addCart(); // 调用自定义组件中的方法
   },
 
   /**
    * 监听底部导航栏事件
    */
-  listentCart:function(e){
+  listentCart: function (e) {
     var _this = this;
-    if (e.detail.num == 'buy'){
+    if (e.detail.num == 'buy') {
       wx.showToast({
         title: '我要购买',
         icon: 'none',
@@ -239,7 +223,7 @@ Page({
       wx.navigateTo({
         url: '/pages/ordering/ordering?id=' + _this.data.product.id,
       })
-    } else if (e.detail.num == 'collection'){
+    } else if (e.detail.num == 'collection') {
       Api.addCollection(_this.data.product.id).then(res => {
         console.log(res);
         wx.showToast({
@@ -247,7 +231,7 @@ Page({
           icon: 'none',
         })
       })
-    } else if (e.detail.num == 'cancel'){
+    } else if (e.detail.num == 'cancel') {
       Api.cancelCollection(_this.data.product.id).then(res => {
         console.log(res);
         wx.showToast({
@@ -255,7 +239,7 @@ Page({
           icon: 'none',
         })
       })
-    } else if (e.detail.num == 'cart'){
+    } else if (e.detail.num == 'cart') {
       wx.showLoading({
         title: '加载中！',
       })
@@ -267,9 +251,9 @@ Page({
       console.log(_this.data.product.id, data);
       app.addCart(data).then((res) => {
         // navbar.cartNumUp();
-        this.buttom = this.selectComponent('#buttom');// 页面初次渲染完成后，使用选择器选择组件实例节点，返回匹配到组件实例对象
+        this.buttom = this.selectComponent('#buttom'); // 页面初次渲染完成后，使用选择器选择组件实例节点，返回匹配到组件实例对象
         let myComponent = this.buttom;
-        myComponent.addCarts();// 调用自定义组件中的方法
+        myComponent.addCarts(); // 调用自定义组件中的方法
         wx.hideLoading();
       })
       console.log(e.detail.num);
@@ -279,7 +263,7 @@ Page({
   /**
    * 切换商品详情展示
    */
-  handleEventListener:function(e) {
+  handleEventListener: function (e) {
     var _this = this;
     _this.setData({
       tabshow: e.detail.num
@@ -301,7 +285,7 @@ Page({
   /**
    * 加载商品信息
    */
-  loadProduct:function(id){
+  loadProduct: function (id) {
     var _this = this;
     Api.loadProductInt(id).then(res => {
       console.log("商品信息", res);
@@ -315,15 +299,19 @@ Page({
   /**
    * 加载拼团模板信息
    */
-  loadSpellTemplate:function(id){
+  loadSpellTemplate: function (id) {
     var _this = this;
     Api.loadSpellTemplate(id).then(res => {
       console.log("拼团模板信息", res);
+      let percentage = res.data.goods.saleCount == 0 ? 0 : parseInt((res.data.goods.saleCount / res.data.goods.stockCount) * 100);
       _this.setData({
         product: res.data,
-        productCarousel: JSON.parse(res.data.goods.image)
+        productCarousel: JSON.parse(res.data.goods.image),
+        percentage: percentage
       })
       _this.loadSpellTeamList(res.data.id);
+
+
       // if(res.data.length > 0){
       //   for (let i = 0; i < res.data.length; i++) {
       //     res.data[i].createTime = util.formatDate(res.data[i].createTime, 'all');
@@ -331,11 +319,11 @@ Page({
       // }
     })
   },
-  
+
   /**
    * 加载拼团队伍列表
    */
-  loadSpellTeamList:function(id){
+  loadSpellTeamList: function (id) {
     var _this = this;
     var data = {
       templateId: id,
@@ -344,16 +332,24 @@ Page({
     }
     Api.loadSpellTeamList(data).then(res => {
       console.log('拼团队伍列表', res);
-      if (res.data.dataList.length > 0){
+      if (res.data.dataList.length > 0) {
         // for (let i = 0; i < res.data.dataList.length; i++) {
         //   res.data.dataList[i].createTime = util.formatDate(res.data.dataList[i].createTime, 'all');
         // }
-        console.log(res.data.dataList);
+        // console.log(res.data.dataList);
         _this.setData({
           spellteam: res.data.dataList,
-          totalPage: res.data.totalPages
+          totalPage: res.data.totalPages,
+          numTotal: res.data.numTotal, //总条数
         })
-        _this.countdown();
+        countdownClear = setInterval(function () {
+          _this.countdown();
+        }, 1000);
+      }
+      if (_this.data.loadFlag == "limit") { //秒杀执行倒计时
+        countdownClear = setInterval(function () {
+          _this.countTime()
+        }, 1000);
       }
     })
   },
@@ -361,18 +357,16 @@ Page({
   /**
    * 拼团倒计时
    */
-  countdown:function(){
+  countdown: function () {
     var _this = this;
     var teamTimeList = [];
-    for (let i = 0; i < _this.data.spellteam.length; i++){
+    for (let i = 0; i < _this.data.spellteam.length; i++) {
       var dayTime = null;
       var date = new Date();
       var now = date.getTime();
-      var endDate = new Date(_this.data.spellteam[i].createTime + _this.data.product.duration);//设置截止时间
+      var endDate = new Date(_this.data.spellteam[i].createTime + _this.data.product.duration); //设置截止时间
       var end = endDate.getTime();
-      console.log(end, now, _this.data.spellteam[i].createTime + _this.data.product.duration);
       var leftTime = end - now; //时间差  
-      console.log(leftTime);
       var d, h, m, s, ms;
       if (leftTime >= 0) {
         d = Math.floor(leftTime / 1000 / 60 / 60 / 24);
@@ -384,31 +378,40 @@ Page({
         s = s < 10 ? "0" + s : s
         m = m < 10 ? "0" + m : m
         h = h < 10 ? "0" + h : h
-        dayTime = d + "天-" + h + "时-" + m + "分-" + s + "秒";
-        teamTimeList.concat(dayTime);
+        dayTime = d + ":" + h + ":" + m + ":" + s;
+        // console.log(dayTime);
+        teamTimeList.push(dayTime);
         //递归每秒调用countTime方法，显示动态时间效果
-        countdownClear = setTimeout(_this.countdown, 1000);
       } else {
-        console.log('已截止')
+        //console.log('已截止')
         _this.setData({
           countdown: '00:00:00'
         })
+        wx.showToast({
+          title: '拼团已结束',
+          icon: 'none',
+        })
+        wx.navigateBack({
+          delta: 1,
+        })
+
       }
+      //console.log(teamTimeList);
     }
     _this.setData({
       spellCountdown: teamTimeList
     })
-    console.log(_this.data.teamTimeList);
+    // console.log(_this.data.spellCountdown);
   },
 
   /**
    * 秒杀倒计时
    */
-  countTime(date) {
+  countTime() {
     var _this = this;
     var date = new Date();
     var now = date.getTime();
-    var endDate = new Date(date);//设置截止时间
+    var endDate = new Date(_this.data.product.endTime); //设置截止时间
     var end = endDate.getTime();
     var leftTime = end - now; //时间差                              
     var d, h, m, s, ms;
@@ -422,16 +425,23 @@ Page({
       s = s < 10 ? "0" + s : s
       m = m < 10 ? "0" + m : m
       h = h < 10 ? "0" + h : h
-      that.setData({
-        countdown: d + "天-" + h + "时-" + m + "分-" + s + "秒",// + ms,
+      _this.setData({
+        countdown: d + ":" + h + ":" + m + ":" + s, // + ms,
       })
       //递归每秒调用countTime方法，显示动态时间效果
-      countdownClear = setTimeout(that.countTime, 1000);
+      //countdownClear = setTimeout(_this.countTime, 1000);
     } else {
-      console.log('已截止')
       _this.setData({
         countdown: '00:00:00'
       })
+      wx.showToast({
+        title: '秒杀已结束',
+        icon: 'none',
+      })
+      wx.navigateBack({
+        delta: 1,
+      })
+
     }
 
   },
@@ -439,7 +449,7 @@ Page({
   /**
    * 点击分享
    */
-  share:function(){
+  share: function () {
     var _this = this;
     _this.setData({
       shareViewOpen: !_this.data.shareViewOpen
@@ -449,30 +459,51 @@ Page({
   /**
    * 生成大图分享
    */
-  sharePic:function(){
+  sharePic: function () {
     var _this = this;
+
+  },
+
+  /**
+   * 拼团支付
+   */
+  tospellPay: function () {
+    //  console.log(this.data.product)
+    //   return;
+    wx.navigateTo({
+      url: '/pages/spellOrdering/spellOrdering?id=' + this.data.product.id + "&goodsId=" + this.data.product.goodsId + "&isAddGroup=false",
+    })
+  },
+
+  //秒杀立即购买
+  spikePay: function () {
+    //  console.log(this.data.product)
+    //   return;
+    wx.navigateTo({
+      url: '/pages/spellOrdering/spellOrdering?id=' + this.data.product.id + "&goodsId=" + this.data.product.goodsId + "&isAddGroup=false",
+    })
   },
 
 
-    /**
+  /**
    * 分享事件
    */
   shareImage(event) {
     var _this = this;
     _this.setData({
-      portrait_temp:_this.data.userInfo.avatarUrl,
-      wxName:_this.data.userInfo.nickName,
+      portrait_temp: _this.data.userInfo.avatarUrl,
+      wxName: _this.data.userInfo.nickName,
       shareViewOpen: !_this.data.shareViewOpen
     })
     //缓存canvas绘制小程序二维码
     _this.drawImage();
     wx.hideLoading();
-    setTimeout(function() {
+    setTimeout(function () {
       _this.canvasToImage()
     }, 200)
   },
   drawImage() {
-    var _this=this;
+    var _this = this;
     //绘制canvas图片    
     const ctx = wx.createCanvasContext('myCanvas')
     var bgPath = _this.data.bgPath
@@ -513,6 +544,7 @@ Page({
     ctx.fillText('长按二维码领红包', windowWidth / 2, 1.36 * windowWidth)
     ctx.draw();
   },
+
   canvasToImage() {
     var _this = this
     console.log()
@@ -524,19 +556,35 @@ Page({
       destWidth: _this.data.windowWidth * 4,
       destHeight: _this.data.windowWidth * 4 * _this.data.scale,
       canvasId: 'myCanvas',
-      success: function(res) {
+      success: function (res) {
         console.log('朋友圈分享图生成成功:' + res.tempFilePath)
         wx.previewImage({
           current: 'www.ooago.com', // 当前显示图片的http链接
           urls: [res.tempFilePath] // 需要预览的图片http链接列表
         })
       },
-      fail: function(err) {
+      fail: function (err) {
         console.log('失败')
         console.log(err)
       }
+
+    })
+  },
+
+  //展示全部的拼团订单最多10条
+  showSpellListClick() {
+    let _this = this;
+    _this.setData({
+      popupSpell: true
+    })
+  },
+
+  //关闭全部的拼团订单最多10条
+  hideSpellListClick() {
+    let _this = this;
+    _this.setData({
+      popupSpell: false
     })
   },
 
 })
-

@@ -21,7 +21,7 @@
         <view class='content'>
           <view style='display:flex;flex-direction: row;justify-content: center;align-items: center;'>
             <image style='width: 44rpx;height: 30rpx;' src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/sort/%E4%BC%9A%E5%91%98%402x.png'></image>
-            <text style='font-size:40rpx;color:#F57500;'>￥{{product.price}}</text>
+            <text style='font-size:40rpx;color:#F57500;'>￥{{product.memberPrice}}</text>
           </view>
           <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/product/%E5%9B%BE%E5%B1%82%20158%402x.png' bindtap="share"></image>
         </view>
@@ -34,19 +34,19 @@
               库存：{{product.stockCount}}
             </text>
           </view>
-          <view class='right'>
+          <navigator url='/pages/recharge/recharge' class='right'>
             <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/product/kaitong.png'></image>
-          </view>
+          </navigator>
         </view>
       </view>
       <view class='product_price' wx:if='{{loadFlag == "limit"}}'>
         <view class='content'>
-          <text style='font-size:40rpx;color:#F57500;'>￥{{product.goods.price}}</text>
-          <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/product/%E5%9B%BE%E5%B1%82%20158%402x.png'></image>
+          <text style='font-size:40rpx;color:#F57500;'>￥{{product.spellPrice}}</text>
+          <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/product/%E5%9B%BE%E5%B1%82%20158%402x.png' bindtap="share"></image>
         </view>
         <view class='left'>
           <text style='font-size:24rpx;color:#999999;margin-left:10rpx;text-decoration:line-through;'>
-            原价：￥{{product.goods.price}}
+            原价：￥{{product.spellPrice}}
           </text>
           <text style='font-size:24rpx;color:#999999;margin-left:20rpx;'>
             库存：{{(product.goods.stockCount - product.goods.saleCount) > 0 ? (product.goods.stockCount - product.goods.saleCount):'已售罄'}}
@@ -58,12 +58,12 @@
       </view>
       <view class='product_price' wx:if='{{loadFlag == "spell"}}'>
         <view class='content'>
-          <text style='font-size:40rpx;color:#F57500;'>￥{{product.goods.price}}</text>
-          <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/product/%E5%9B%BE%E5%B1%82%20158%402x.png'></image>
+          <text style='font-size:40rpx;color:#F57500;'>￥{{product.spellPrice}}</text>
+          <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/product/%E5%9B%BE%E5%B1%82%20158%402x.png' bindtap="share"></image>
         </view>
         <view class='left'>
           <text style='font-size:24rpx;color:#999999;margin-left:10rpx;text-decoration:line-through;'>
-            原价：￥{{product.goods.price}}
+            原价：￥{{product.spellPrice}}
           </text>
           <text style='font-size:24rpx;color:#999999;margin-left:20rpx;'>
             库存：{{(product.goods.stockCount - product.goods.saleCount) > 0 ? (product.goods.stockCount - product.goods.saleCount):'已售罄'}}
@@ -80,7 +80,14 @@
     </view>
     <!-- 拼团模块 -->
     <view style='margin-bottom:30rpx;'>
-      <view class='spell' wx:if='{{loadFlag == "spell"}}' wx:for='{{spellteam}}' wx:key='item'>
+      <view class='spell-list-tab'>
+        <text>{{numTotal}}人在拼单,可直接参与</text>
+        <view class='spell-list-tab-all' catchtap='showSpellListClick'>
+          <text>查看全部</text>
+          <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/personal/%E5%8F%B3%E7%AE%AD%E5%A4%B4icon%402x.png'></image>
+        </view>
+      </view>
+      <view class='spell' wx:if='{{loadFlag == "spell" && index < 2}}' wx:for='{{spellteam}}' wx:key='{{index}}'>
         <view class='spell_one'>
           <view class='spell_one_top'>{{item.limitSpellNum}}人团</view>
           <view class='spell_one_buttom'>
@@ -94,9 +101,11 @@
             <text style='color:#F10202'>{{(item.limitSpellNum)-(item.spellNum)}}人</text>
             拼成
           </view>
-          <view class='spell_three_buttom'>创建时间：{{item.createTime}}</view>
+          <view class='spell_three_buttom'>剩余：{{spellCountdown[index]}}</view>
         </view>
-        <view class='spell_four'>加入拼团</view>
+        <navigator url='/pages/spellOrdering/spellOrdering?id={{product.id}}&goodsId={{product.goodsId}}&isAddGroup=true&taskId={{item.id}}' class='spell_four'>
+          加入拼团
+        </navigator>
       </view>
     </view>
     <!-- 秒杀模块 -->
@@ -109,7 +118,7 @@
         <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/product/%E5%9B%BE%E5%B1%82%2032%402x.png'></image>
         <view>
           已抢
-          <text style='color:#F10202'>30%</text>
+          <text style='color:#F10202'>{{percentage}}%</text>
         </view>
       </view>
     </view>
@@ -126,12 +135,12 @@
     <navbar_buttom wx:if='{{loadFlag == "product"}}' id='buttom' bindeventListener='listentCart'></navbar_buttom>
     <!-- 秒杀类底部导航组件 -->
     <view class='location' wx:if='{{loadFlag == "limit"}}'>
-      <view class='location_num'>库存：200000</view>
+      <view class='location_num'>库存：{{product.goods.stockCount - product.goods.saleCount}}</view>
       <view class='location_statistical'>
         邮费：
         <text>距离计算</text>
       </view>
-      <view class='location_button'>立即购买</view>
+      <view class='location_button' catchtap='spikePay'>立即购买</view>
     </view>
     <!-- 拼团类底部导航组件 -->
     <view class='location' wx:if='{{loadFlag == "spell"}}'>
@@ -140,9 +149,9 @@
       </view>
       <view class='location_statistical'>
         邮费：
-        <text>{{product.goods.enablePostPrice?'距离计算':'无'}}</text>
+        <text>{{product.goods.enablePostPrice ? '距离计算' : '无' }}</text>
       </view>
-      <view class='location_button'>自己开团</view>
+      <view class='location_button' catchtap='tospellPay'>自己开团</view>
     </view>
   </view>
   <view class='page-content' style='height:calc(100vh - {{navH}}px)' wx:if='{{tabshow == 1}}'>
@@ -180,7 +189,7 @@
             </view>
           </view>
         </view>
-        <view class='shareColse' bindtap="toggleDialog">取消</view>
+        <view class='shareColse' bindtap="share">取消</view>
       </view>
     </view>
   </view>
@@ -188,5 +197,39 @@
   <view class="zan-dialog {{ showDialog  ? 'zan-dialog--show' : '' }}">
     <view class="zan-dialog__mask" bindtap="toggleDialog" />
     <view class="zan-dialog__container"></view>
+  </view>
+</view>
+<!-- 拼团列表弹出框 -->
+<view class='popup-spell' wx:if="{{popupSpell}}">
+  <view class='popup-spell-content'>
+    <icon class='popup-spell-colse' bindtap='hideSpellListClick'></icon>
+    <view class='popup-spell-list-tab'>
+      <text>正在拼团</text>
+    </view>
+    <scroll-view style='height:592rpx;' scroll-y>
+      <view class='spell' wx:if='{{loadFlag == "spell"}}' wx:for='{{spellteam}}' wx:key='{{index}}'>
+        <view class='spell_one'>
+          <view class='spell_one_top'>{{item.limitSpellNum}}人团</view>
+          <view class='spell_one_buttom'>
+            {{item.userInfo.nickName == '' ? item.userInfo.username:item.userInfo.nickName}}
+          </view>
+        </view>
+        <view class='spell_two'></view>
+        <view class='spell_three'>
+          <view class='spell_three_top'>
+            还差
+            <text style='color:#F10202'>{{(item.limitSpellNum)-(item.spellNum)}}人</text>
+            拼成
+          </view>
+          <view class='spell_three_buttom'>剩余：{{spellCountdown[index]}}</view>
+        </view>
+        <navigator url='/pages/spellOrdering/spellOrdering?id={{product.id}}&goodsId={{product.goodsId}}&isAddGroup=true&taskId={{item.id}}' class='spell_four'>
+          加入拼团
+        </navigator>
+      </view>
+    </scroll-view>
+    <view class='popup-spell-list-buttom' wx:if="{{numTotal > 10}}">
+      <text>拼团订单只展示10条</text>
+    </view>
   </view>
 </view>

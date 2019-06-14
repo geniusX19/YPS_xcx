@@ -15,14 +15,14 @@
     <!-- 列表 -->
     <view class='content_list' wx:if='{{!inputSearch}}'>
       <view class='sortList'>
-        <scroll-view>
+        <scroll-view style='height:80vh;' scroll-y>
           <view wx:for='{{sortList}}' wx:key='item' class='sortList_item {{currentTab==index?"sortList_item_s":""}}' data-num='{{index}}' catchtap='swicthing'>
             {{item.title}}
           </view>
         </scroll-view>
       </view>
       <view class='productList' wx:if='{{!isHide}}'>
-        <scroll-view>
+        <scroll-view style='height:80vh;' scroll-y bindscrolltolower="onReachBottom">
           <view wx:for='{{productList}}' wx:key='item' class='productList_item' catchtap='toProductInt' data-id='{{item.id}}'>
             <view class='productList_item_img'>
               <image src='{{item.defaultImage}}'></image>

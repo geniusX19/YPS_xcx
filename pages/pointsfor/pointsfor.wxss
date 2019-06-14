@@ -282,6 +282,12 @@ page {
   padding: 30rpx;
   border-bottom: 2rpx solid #E6E6E6;
   font-size: 30rpx;
+  position: relative;
+}
+
+.record_left{
+  padding-left: 10rpx;
+  box-sizing: border-box;
 }
 
 .record_left_buttom{

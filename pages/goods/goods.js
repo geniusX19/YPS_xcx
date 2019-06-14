@@ -21,43 +21,7 @@ Page({
     loadFlag: null,// 加载标识
     totalPage: null,// 当前页面数据总页数
     isHide: false,// 控制内容显示隐藏
-    productList: [{
-      img: 'https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/sort/%E5%9B%BE%E5%B1%82%2026%402x.png',
-      tit: '豆浆粉冲调饮品营养早餐',
-      price: '29.90'
-    }, {
-      img: 'https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/sort/%E5%9B%BE%E5%B1%82%2026%402x.png',
-      tit: '豆浆粉冲调饮品营养早餐',
-      price: '26.90'
-    }, {
-      img: 'https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/sort/%E5%9B%BE%E5%B1%82%2026%402x.png',
-      tit: '豆浆粉冲调饮品营养早餐',
-      price: '26.90'
-    }, {
-      img: 'https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/sort/%E5%9B%BE%E5%B1%82%2026%402x.png',
-      tit: '豆浆粉冲调饮品营养早餐',
-      price: '29.90'
-    }, {
-      img: 'https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/sort/%E5%9B%BE%E5%B1%82%2026%402x.png',
-      tit: '豆浆粉冲调饮品营养早餐',
-      price: '26.90'
-    }, {
-      img: 'https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/sort/%E5%9B%BE%E5%B1%82%2026%402x.png',
-      tit: '豆浆粉冲调饮品营养早餐',
-      price: '26.90'
-    }, {
-      img: 'https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/sort/%E5%9B%BE%E5%B1%82%2026%402x.png',
-      tit: '豆浆粉冲调饮品营养早餐',
-      price: '29.90'
-    }, {
-      img: 'https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/sort/%E5%9B%BE%E5%B1%82%2026%402x.png',
-      tit: '豆浆粉冲调饮品营养早餐',
-      price: '26.90'
-    }, {
-      img: 'https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/sort/%E5%9B%BE%E5%B1%82%2026%402x.png',
-      tit: '豆浆粉冲调饮品营养早餐',
-      price: '26.90'
-    }]
+    productList: []
   },
 
   /**
@@ -99,6 +63,7 @@ Page({
             navTitName: '会员商品',
             loadFlag: 'members',
           })
+          _this.loadCategory();
           break;
         default:
           console.log(typeof (options.flag))
@@ -121,7 +86,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+      page = 1;
   },
 
   /**
@@ -150,24 +115,22 @@ Page({
    */
   onReachBottom: function () {
     var _this = this;
+    page++;
     switch (_this.data.loadFlag) {
       case 'members':
       case 'product':
         if (page >= 1 && page <= _this.data.totalPage) {
-          page++;
-          _this.loadswapList();
+          _this.loadCategory();
         }
         break;
       case 'spell':
         if (page >= 1 && page <= _this.data.totalPage) {
-          page++;
-          _this.loadRecord();
+          _this.loadSpellOrLimitList('GROUP');
         }
         break;
       case 'limit':
         if (page >= 1 && page <= _this.data.totalPage) {
-          page++;
-          _this.loadRecord();
+          _this.loadSpellOrLimitList('LIMITED_TIME');
         }
         break;
     }
@@ -185,7 +148,7 @@ Page({
    */
   toviews:function(e){
     var _this = this;
-    console.log('商品id', e.currentTarget.dataset.id)
+    console.log('商品id', e.currentTarget.dataset.id);
     switch(_this.data.loadFlag){
       case 'spell':
         _this.tospell(e.currentTarget.dataset.id);
@@ -198,6 +161,7 @@ Page({
         break;
       case 'members':
         _this.tomembers(e.currentTarget.dataset.id);
+        break;
       default:
         wx.showToast({
           title: '未匹配到对应数据！',
@@ -246,10 +210,38 @@ Page({
     })
   },
 
+  /*
+  *   会员热卖
+  */
+  loadCategory(){
+    let _this = this;
+    let data = {
+      "categoryId": "",
+      "title": "",
+      "isDel": false,
+      "sort": "dsc",
+      "enableMemberPrice": true,
+    }
+    Api.loadCategory(data,page,size).then( res => {
+      console.log(res)
+      if (res.data.dataList.length > 0) {
+        _this.setData({
+          productList: _this.data.productList.concat(res.data.dataList),
+          totalPage: res.data.totalPages,
+          isHide: false
+        })
+      } else {
+        _this.setData({
+          isHide: true
+        })
+      }
+    })
+  },
+
   /**
-   * 
+   * 拼团、秒杀 列表数据接口
    */
-  loadSpellOrLimitList: function(type){
+  loadSpellOrLimitList: function(type = ''){
     var _this = this;
     var data = {
       page: page,
@@ -257,13 +249,10 @@ Page({
       type: type
     }
     Api.loadSpellOrLimitList(data).then(res => {
-      console.log(res);
-      // for (let i = 0; i < res.data.dataList.length; i++) {
-      //   res.data.dataList[i].createDate = util.formatDate(res.data.dataList[i].createDate);
-      // }
+      //console.log(res);
       if(res.data.dataList.length > 0){
         _this.setData({
-          productList: res.data.dataList,
+          productList: _this.data.productList.concat(res.data.dataList),
           totalPage: res.data.totalPages,
           isHide: false
         })

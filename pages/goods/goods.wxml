@@ -4,17 +4,20 @@
   <view class='page-content' style='height:calc(100vh - {{navH}}px)'>
     <!-- 商品列表 -->
     <view class='productList' wx:if='{{!isHide}}'>
-      <scroll-view>
-        <view wx:for='{{productList}}' wx:key='item' class='productList_item' catchtap='toviews'>
+      <scroll-view style='height:90vh' scroll-y bindscrolltolower="onReachBottom">
+        <view wx:for='{{productList}}' wx:key='item' class='productList_item' catchtap='toviews' data-id='{{item.id}}'>
           <view class='productList_item_img'>
-            <image src='{{item.goods.defaultImage}}'></image>
+            <image wx:if="{{loadFlag == 'members'}}" src='{{item.defaultImage}}'></image>
+            <image wx:else src='{{item.goods.defaultImage}}'></image>
           </view>
           <view class='product_info'>
-            <view class='product_info_tit'>{{item.goods.title}}</view>
+            <view class='product_info_tit' wx:if="{{loadFlag == 'members'}}">{{item.title}}</view>
+            <view class='product_info_tit' wx:else>{{item.goods.title}}</view>
             <view class='product_info_price'>
               <view class='product_info_price_item'>
-                <text>￥{{item.spellPrice}}</text>
-                <text style='color:#333333;font-size:25rpx;margin-left:15rpx;'>限定人数：{{item.limitedSpellNum}}</text>
+                <text wx:if="{{loadFlag == 'members'}}">￥{{item.memberPrice}}</text>
+                <text wx:else>￥{{item.spellPrice}}</text>
+                <text style='color:#333333;font-size:25rpx;margin-left:15rpx;' wx:if="{{loadFlag == 'spell'}}">{{item.limitedSpellNum}}人团</text>
               </view>
               <view class='buttons' catchtap='toviews' data-id='{{item.id}}'>
                 <view wx:if='{{loadFlag == "product"}}'>查看详情</view>

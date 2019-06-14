@@ -17,7 +17,7 @@
                 <!-- <text style='text-decoration:line-through;color:#999999;font-size:25rpx;margin-left:15rpx;'>￥{{item.goods.price}}</text> -->
               </view>
               <image src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAACtElEQVRIS7WXTUhUYRSGnzOKRdqihTHZn+FcszACxUVBiyjJFhHu3GjfEC0qCBctDAsiQoiIFoILF84dXbjMRZBBUbQrKqIfxLkDihKBSISoMJFz4k406XiduTPevvV53+c75zuce65QwlEn2oRqDGErku6WyPCTYm2kWIEbr45ZBCqz2nJ2yAH7RzFeRYPViV4GHVgLkQdixa7/N7AqQtLMArtzIEuktoWlccCthK9TVMaaNB0ooxs494pl9/miAsWBHZME6rzNdVGs+PbAwZo0bSiFuveqWHbO+3tfxXfG6piPwJH8Gem8WPFqP1kXBOuEqaVMTiI65McQ6CGUfsSifpWjI0sbabJgfXG7nL2zDejKIUT2k9ZmhOPAPp/A3LDviL4nHXqNMA3pGST9QSIjc26gaLJzJ1o2AjQCNSVC/Mp+ApOIRkWT5hXKCb/KgOK+iDpGAzIrxiblgh8C3cWoNh8rw5nmUseMA2c2b+jL4SWR2lP/utoxY8B5X9JSg0SfSSTemunq1R6aMKMIHaX6FtA9Fctu+xuzboBowtgIF4KF62Ox4udWe3pOLnXMIHApIPiYWHZ7rteGI1Md434QsqUp7RIyIVbssJd2Y3DCvEFoKQ2YVc0RscMirJsV3qWeMmF+8W2T0D/ylVCDNAxN+ip1ZotE3wUCDulpqYs/9wk2ncBwIGCVW1Ifu+sTHI2DdgUChnGx7LM+weYt0BwM2Luz1w8QdyHYM+2usOE84E+o3oCyFKJ3QI/liV2gsmKX1Awu5x0gmVWnnClPI2EStE8i8TXvr8mudjR0E2jy1IVCLVI35FYxe9Zn/PlKFVuWF3Lm+Axwr9AGqYloFNEeoH7NBdIV1XJwcL7wyEyYVoT7uH8OIRlBq/rF6k/5efPM34ZjriFcBMoQeiViu1++Nec3UPXhKBEQQ+MAAAAASUVORK5CYII=" class='delBtn' data-id="{{item.goodsId}}" catchtap='delCollection'>取消收藏</image>
-              <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/index/%E5%9C%86%E8%A7%92%E7%9F%A9%E5%BD%A2%206%20%E6%8B%B7%E8%B4%9D%402x.png' catchtap='addCart'></image>
+              <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/index/%E5%9C%86%E8%A7%92%E7%9F%A9%E5%BD%A2%206%20%E6%8B%B7%E8%B4%9D%402x.png' catchtap='addCart' data-id='{{item.goodsId}}'></image>
             </view>
           </view>
         </view>

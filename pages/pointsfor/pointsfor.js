@@ -29,9 +29,13 @@ Page({
     totalPage: null,// 当前页数据总页数
     productList: [],// 商品列表
     cashCoupons: [],// 现金券列表
+    cashCouponsId: '', //现金券列表的id
     exchangeRecord: [],// 兑换记录
     product: {},// 单条商品信息
     productCarousel: [],// 单条商品图片轮播信息
+    isShowAddress: false, //弹出地址列表
+    addressIndex: 0, //获取地址列表的索引
+    addressArr: [], //获取地址列表
   },
 
   /**
@@ -154,14 +158,14 @@ Page({
             productList: res.data.dataList,
             totalPage:res.data.totalPages
           })
-          console.log(_this.data.productList);
+          //console.log(_this.data.productList);
           break;
         case 1:
           _this.setData({
             cashCoupons: res.data.dataList,
             totalPage: res.data.totalPages
           })
-          console.log(res.data.dataList);
+         // console.log(res.data.dataList);
           break;
         default:
           wx.showToast({
@@ -181,12 +185,12 @@ Page({
       for (let i = 0; i < res.data.dataList.length; i ++){
         res.data.dataList[i].createDate = util.formatDate(res.data.dataList[i].createDate,'');
       }
-      console.log(res.data.dataList);
+      //console.log(res.data.dataList);
       _this.setData({
         exchangeRecord: res.data.dataList,
         totalPage: res.data.totalPages
       })
-      console.log(_this.data.exchangeRecord);
+     // console.log(_this.data.exchangeRecord);
     })
   },
 
@@ -195,14 +199,89 @@ Page({
    */
   performExchange:function(e){
     var _this =this;
-    Api.performExchange(e.currentTarget.dataset.id).then(res => {
-      console.log(res);
-      wx.showToast({
-        title: '兑换成功！',
-        icon: 'none',
-      })
+    Api.addressList().then(res => {
+      //console.log(res)
+      if(res.code === 2000){
+        if(res.data.length < 1) {
+          wx.showModal({
+            //title: '',
+            content: '没有收货地址，是否去添加收货地址？', 
+            success(res) {
+              if (res.confirm) {
+                wx.navigateTo({
+                  url: '/pages/addresses/addresses',
+                })
+              } else if (res.cancel) {
+                //console.log('用户点击取消')
+              }
+            }
+          })
+          return false;
+        }
+        _this.setData({
+          addressArr: res.data,
+          isShowAddress: true,
+          cashCouponsId: e.currentTarget.dataset.id
+        })
+      }
+    })
+
+    // Api.performExchange(e.currentTarget.dataset.id).then(res => {
+    //   console.log(res);
+    //   wx.showToast({
+    //     title: '兑换成功！',
+    //     icon: 'none',
+    //   })
+    // })
+  },
+
+  //取消地址的弹出
+  colseAddressClick(){
+    let _this = this;
+    _this.setData({
+      isShowAddress: false
     })
   },
+  //确认获取地址按钮
+  confirmAddressClick(){
+    let _this = this;
+    wx.showModal({
+      //title: '',
+      content: '是否立即兑换？',
+      success(res) {
+        if (res.confirm) {
+          Api.performExchange(_this.data.cashCouponsId, _this.data.addressArr[_this.data.addressIndex].id).then(res => {
+            //console.log(res);
+            if (res.code == 2000){
+              wx.showToast({
+                title: '兑换成功！',
+                icon: 'none',
+              })
+              _this.setData({
+                isShowAddress: false
+              })
+            }
+          })
+        } else if (res.cancel) {
+          //console.log('用户点击取消')
+          _this.setData({
+            isShowAddress: false
+          })
+        }
+      }
+    })
+  },
+
+
+  //获取地址的id
+  getAddressClick(e) {
+    let _this = this;
+    _this.setData({
+      addressIndex: e.currentTarget.dataset.index
+    })
+  },
+
+
 
   /**
   * 控制 pop 的打开关闭
@@ -213,19 +292,19 @@ Page({
   toggleDialog:function(e) {
     var _this = this;
     if (this.data.showDialog){
-      console.log(_this.data.productCarousel)
+      //console.log(_this.data.productCarousel)
       this.setData({
         showDialog: !this.data.showDialog
       });
     }else{
       Api.loadProductInt(e.currentTarget.dataset.id).then(res => {
-        console.log(res);
+        //console.log(res);
         _this.setData({
           product: res.data,
           productCarousel: JSON.parse(res.data.image)
         })
       })
-      console.log(_this.data.productCarousel)
+      //console.log(_this.data.productCarousel)
       this.setData({
         showDialog: !this.data.showDialog
       });
