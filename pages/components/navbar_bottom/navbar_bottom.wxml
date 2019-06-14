@@ -1,0 +1,24 @@
+<!--pages/components/navbar_bottom/navbar_bottom.wxml-->
+<view class='weui-navbar' id='buttom'>
+  <navigator url='/pages/index/index' open-type='switchTab' class='weui-navbar__item'>
+    <image src='/imgs/tarImg/home.png'></image>
+    <text>首页</text>
+  </navigator>
+  <navigator url='/pages/cart/cart' open-type='switchTab' class='weui-navbar__item'>
+    <image src='/imgs/tarImg/cart.png'></image>
+    <text>购物车</text>
+    <view class='tip'>
+      {{num}}
+    </view>
+  </navigator>
+  <view class='weui-navbar__item' catchtap='collectiion'>
+    <image src='{{collection?"https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/product/collection.png":"https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/product/%E5%9B%BE%E5%B1%82%20159%402x.png"}}'></image>
+    <text>收藏</text>
+  </view>
+  <view class='weui-navbar__button1' catchtap='addCart'>
+    <view class='item'>加入购物车</view>
+  </view>
+  <view class='weui-navbar__button2' catchtap='tooredring'>
+    <view class='item'>立即购买</view>
+  </view>
+</view>

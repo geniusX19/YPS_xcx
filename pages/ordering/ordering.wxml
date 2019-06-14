@@ -1,0 +1,141 @@
+<!--pages/ordering/ordering.wxml-->
+
+<!-- 引入公共模板 -->
+<import src="/pages/template/space/space.wxml" />
+
+<view class='view-page'>
+  <navbar page-name1="确认订单"></navbar>
+  <view class='page-content' style='height:calc(100vh - {{navH}}px)'>
+
+
+    <!--外卖配送-->
+    <view class='ordering_top'>
+      <view class='ordering_top_tit'>
+        <view class='ordering_top_tit_body'>
+          <view class='{{select == 0?"ordering_top_tit_body_select":"ordering_top_tit_body_noselect"}}' catchtap='orderTypeSwitch' data-index='0'>外卖配送</view>
+          <view class='{{select == 1?"ordering_top_tit_body_select":"ordering_top_tit_body_noselect"}}' catchtap='orderTypeSwitch' data-index='1'>到店自取</view>
+        </view>
+      </view>
+      <!--外卖配送-->
+      <view class='distribution' wx:if='{{select == 0}}'>
+        <view class='distribution_left'>
+          <view class='distribution_top'>
+            <text>姓名</text>
+            <text style='margin-left:20rpx;'>15956960191</text>
+          </view>
+          <view class='distribution_bottom'>重庆猪圈火锅店（马鞍山路店)</view>
+        </view>
+        <view class='store_icon'>
+          <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/ordering/%E5%AE%9A%E4%BD%8D%E5%9C%B0%E5%9B%BE%402x.png'></image>
+        </view>
+      </view>
+      <!-- 到店自取 -->
+      <view class='store' wx:if='{{select == 1}}'>
+        <view class='store_tit'>选择门店</view>
+        <view style='display: flex;flex-direction: row;'>
+          <view class='store_item'>
+            <view class='store_list' wx:for='{{storeList}}' wx:key='item'>
+              <view class='store_body'>
+                <image catchtap='catchSelect' data-index='{{index}}' src='{{item.selected == true ? "https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/ordering/%E7%9F%A2%E9%87%8F%E6%99%BA%E8%83%BD%E5%AF%B9%E8%B1%A1%402x.png":"https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/ordering/%E6%A4%AD%E5%9C%86%202%402x.png"}}'></image>
+                <view class='store_name'>
+                  {{item.store}}
+                </view>
+              </view>
+            </view>
+          </view>
+          <view class='store_icon'>
+            <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/ordering/%E5%AE%9A%E4%BD%8D%E5%9C%B0%E5%9B%BE%402x.png'></image>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 订单信息 -->
+
+    <view class='orderPage'>
+      <!-- 顶部标题 -->
+      <view class='orderPage_tit'>
+        <view class='orderPage_tit_left'>
+          <view class='orderPage_tit_left_item_left'></view>
+          <view class='orderPage_tit_left_item_right'>订单信息</view>
+        </view>
+      </view>
+      <!-- 商品信息 -->
+      <view class='ordering_info'>
+        <view class='ordering_Product' wx:for='{{productInfoList}}'  wx:key='item'>
+          <view class='ordering_Product_img'>
+            <image src='{{item.image}}'></image>
+          </view>
+          <view class='ordering_Product_item'>
+            <view class='ordering_Product_tit'>{{item.title}}</view>
+            <view class='ordering_Product_price'>
+              <view class='product_price'>￥{{item.price}}</view>
+              <view class='product_num'>x{{item.num}}</view>
+              <view class='buy_num'>
+                <view catchtap='reduceClick' data-index='{{index}}' style='border-right:1rpx solid #E6E6E6'>-</view>
+                <view>{{item.num}}</view>
+                <view catchtap='addClick' data-index='{{index}}' style='border-left:1rpx solid #E6E6E6'>+</view>
+              </view>
+            </view>
+          </view>
+        </view>
+        <view class='listview'>
+          <view class='listview_item'>
+            <view class='font'>支付方式</view>
+            <view class="picker">
+              <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}">
+                <view class="pickers">{{array[index]}}</view>
+              </picker>
+            </view>
+            <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/personal/%E5%8F%B3%E7%AE%AD%E5%A4%B4icon%402x.png'></image>
+          </view>
+          <view class='listview_item'>
+            <view class='font'>配送方式</view>
+            <view class="picker">
+              <picker bindchange="bindPickerChanges" value="{{indexs}}" range="{{arrays}}">
+                <view class="pickers">{{arrays[indexs]}}</view>
+              </picker>
+            </view>
+            <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/personal/%E5%8F%B3%E7%AE%AD%E5%A4%B4icon%402x.png'></image>
+          </view>
+          <view class='listview_item' wx:if="{{canUseCouponCounBOl}}">
+            <view class='font'>优惠券</view>
+            <view class='picker'>{{infoOrder.canUseCouponCount}}</view>
+            <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/personal/%E5%8F%B3%E7%AE%AD%E5%A4%B4icon%402x.png'></image>
+          </view>
+          <navigator class='listview_item' url='/pages/mycoupons/mycoupons?limt=ordering' wx:else>
+            <view class='font'>优惠券</view>
+            <view class='picker'>{{infoOrder.canUseCouponCount}}</view>
+            <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/personal/%E5%8F%B3%E7%AE%AD%E5%A4%B4icon%402x.png'></image>
+          </navigator>
+          <view class='listview_item'>
+            <view class='font'>备注</view>
+            <view class='picker'>
+              <input placeholder='选填:请写下你的留言' placeholder-class='font input_style' bindinput='remarksClick'></input>
+            </view>
+            <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/personal/%E5%8F%B3%E7%AE%AD%E5%A4%B4icon%402x.png'></image>
+          </view>
+        </view>
+        <view class='listview_bottom'>
+          <text style='color:#999999;font-size:20rpx;margin-right:10rpx;'>共{{totalNum}}件 </text> 小计<text style='font-size:24rpx;color:#E05E2C;margin-left:10rpx;'>¥{{infoOrder.priceModel.totalMomey}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 遮罩层 -->
+
+    <!-- 底部遮挡层 -->
+    <template is='space'></template>
+
+    <!-- 底部状态栏 -->
+
+    <view class='location'>
+      <view class='location_num'>共{{totalNum}}件商品</view>
+      <view class='location_statistical'>合计：
+        <text>¥{{infoOrder.priceModel.finalMoney}}</text>
+      </view>
+      <view catchtap='paymentClick' class='location_button'>提交订单</view>
+    </view>
+
+  </view>
+</view>

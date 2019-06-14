@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "navbar_buttom": "/pages/components/navbar_bottom/navbar_bottom",
+    "navbar": "/pages/components/navbar/navbar"
+  }
+}

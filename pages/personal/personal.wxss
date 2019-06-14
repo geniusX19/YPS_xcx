@@ -1,0 +1,215 @@
+/* 全局页面背景 */
+
+page{
+  background-color: #ededee
+}
+
+.bo{
+  border-radius: 50rpx;
+}
+
+.view-page {
+  height: 100%;
+  width: 100%;
+  left: 0;
+  top: 0;
+  box-sizing: border-box;
+  position: absolute;
+  overflow: hidden;
+}
+
+.page-content {
+  box-sizing: border-box;
+  position: relative;
+  overflow-y: auto;
+}
+
+/* 顶部背景 */
+
+.index_bg{
+  width: 100%;
+  height: 307rpx;
+  position: absolute;
+  z-index: -1
+}
+
+/* 用户信息 */
+
+.JFrame{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 15rpx;
+}
+
+.JFrame image{
+  width: 130rpx;
+  height: 130rpx;
+  border-radius: 50%;
+  margin: 10rpx 0;
+}
+
+.JFrame text{
+  font-size: 30rpx;
+  color: #FFFFFF;
+  margin: 2rpx 0 10rpx 0;
+}
+
+/* 账户信息 */
+
+.account{
+  width: 690rpx;
+  height: 160rpx;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20rpx;
+  background-color: white;
+}
+
+.item{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 28rpx;
+}
+
+.top{
+  margin-top: 15rpx;
+  font-size: 24rpx;
+  color: #999999;
+}
+
+/* 订单信息 */
+
+.order{
+  width: 690rpx;
+  height: 255rpx;
+  margin: 35rpx auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 20rpx;
+  background-color: white;
+}
+
+.item_top{
+  width: 100%;
+  height: 100rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 28rpx;
+}
+
+.left{
+  font-size: 28rpx;
+  color: #282828;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 30rpx;
+}
+
+.right{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 30rpx;
+  font-size: 24rpx;
+  color: #999999
+}
+
+.right image{
+  width: 16rpx;
+  height: 26rpx;
+  margin-left: 30rpx;
+}
+
+.item_buttom{
+  width: 100%;
+  height: 150rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 28rpx;
+}
+
+.item_buttom_item{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center
+}
+
+.adjust_left{
+  margin-left: 30rpx;
+}
+
+.adjust_right{
+  margin-right: 30rpx;
+}
+
+.item_buttom image{
+  width: 60rpx;
+  height: 52rpx;
+}
+
+.item_buttom text{
+  font-size: 24rpx;
+  color: #999999;
+  margin-top: 10rpx;
+}
+
+/* 领取优惠券标语 */
+
+.coupons{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.coupons image{
+  width: 690rpx;
+  height: 106rpx;
+}
+
+/* 列表 */
+
+.item_list{
+  width: 690rpx;
+  height: 430rpx;
+  margin: 35rpx auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 20rpx;
+  background-color: white;
+}
+
+.item_list_item{
+  width: 100%;
+  height: 95rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.item_list_item .left image{
+  width: 36rpx;
+  height: 36rpx;
+}
+
+.item_list_item .left text{
+  font-size: 30rpx;
+  color: #282828;
+  margin-left: 20rpx;
+}

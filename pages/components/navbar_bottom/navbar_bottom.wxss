@@ -1,0 +1,125 @@
+/* pages/components/navbar_bottom/navbar_bottom.wxss */
+.weui-navbar {
+  background: white;
+  bottom: 0;
+  top: initial;
+  border-top: 1rpx solid #ccc;
+  border-bottom: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  position: fixed;
+  width: 100%;
+  /* z-index: 30; */
+}
+
+.weui-navbar__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8rpx 0 2px 0;
+  width: 16%;
+  position: relative;
+}
+
+.weui-navbar__item_nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4px 0 2px 0;
+  width: 24%;
+  position: relative;
+}
+
+.tip{
+  width: 18px;
+  height: 18px;
+  position: absolute;
+  top: -2px;
+  right: 2px;
+  border-radius: 50%;
+  background-color: red;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+}
+
+.tip_nav{
+  width: 18px;
+  height: 18px;
+  position: absolute;
+  top: -2px;
+  right: 20px;
+  border-radius: 50%;
+  background-color: red;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+}
+
+.weui-navbar__button1{
+  line-height: 49px;
+  width: 26%;
+}
+
+.weui-navbar__button1 .item{
+  background-color: #e05e2c;
+  color: white;
+  font-size: 17px;
+  text-align: center;
+  margin-top: 2px;
+  line-height: 47px;
+  width: 100%;
+}
+
+.weui-navbar__button2{
+  line-height: 49px;
+  width: 26%;
+}
+
+.weui-navbar__button2 .item{
+  background-color: #41ba53;
+  color: white;
+  font-size: 17px;
+  text-align: center;
+  margin-top: 2px;
+  line-height: 47px;
+  width: 100%;
+}
+
+.weui-navbar__item image {
+  width: 27px;
+  height: 26px;
+}
+
+.weui-navbar__item_nav image {
+  width: 27px;
+  height: 26px;
+}
+
+.weui-navbar__item text {
+  font-size: 10px;
+  color: #999999
+}
+
+.weui-navbar__item_nav text {
+  font-size: 10px;
+  color: #999999
+}
+
+.weui-navbar__title {
+  font-size: 12px;
+}
+
+.weui-navbar__slider {
+  height: 2px;
+}
+
+.space{
+  height: 120rpx;
+  width: 100%;
+}

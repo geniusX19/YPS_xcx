@@ -1,0 +1,34 @@
+<!--pages/goods/goods.wxml-->
+<view class='view-page'>
+  <navbar page-name1="{{navTitName}}"></navbar>
+  <view class='page-content' style='height:calc(100vh - {{navH}}px)'>
+    <!-- 商品列表 -->
+    <view class='productList' wx:if='{{!isHide}}'>
+      <scroll-view>
+        <view wx:for='{{productList}}' wx:key='item' class='productList_item' catchtap='toviews'>
+          <view class='productList_item_img'>
+            <image src='{{item.goods.defaultImage}}'></image>
+          </view>
+          <view class='product_info'>
+            <view class='product_info_tit'>{{item.goods.title}}</view>
+            <view class='product_info_price'>
+              <view class='product_info_price_item'>
+                <text>￥{{item.spellPrice}}</text>
+                <text style='color:#333333;font-size:25rpx;margin-left:15rpx;'>限定人数：{{item.limitedSpellNum}}</text>
+              </view>
+              <view class='buttons' catchtap='toviews' data-id='{{item.id}}'>
+                <view wx:if='{{loadFlag == "product"}}'>查看详情</view>
+                <view wx:if='{{loadFlag == "spell"}}'>加入拼团</view>
+                <view wx:if='{{loadFlag == "limit"}}'>马上抢</view>
+                <view wx:if='{{loadFlag == "members"}}'>查看详情</view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+    <view wx:else style='display:flex;align-items: center;justify-content: center;padding-top: 230rpx;'>
+      <image style='width:303rpx;height:239rpx;' src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/product/common.png' mode='widthFix'></image>
+    </view>
+  </view>
+</view>

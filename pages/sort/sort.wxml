@@ -1,0 +1,89 @@
+<!-- 引入登陆模态框 -->
+<!-- <import src="/pages/template/login/login.wxml" />
+<template is="login" data="{{showpass,eye,password,email,focus,logShow}}"></template> -->
+<view class='view-page'>
+  <navbar page-name="分类"></navbar>
+  <view class='page-content' style='height:calc(100vh - {{navH}}px)'>
+    <!-- 顶部搜索栏 -->
+    <view class='search'>
+      <view id='detail-search'>
+        <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/sort/%E7%9F%A2%E9%87%8F%E6%99%BA%E8%83%BD%E5%AF%B9%E8%B1%A1%402x.png'></image>
+        <input placeholder='搜索商品名称' placeholder-style='color:#8c8c8c;' value='{{_formIndexByQuery == false?inputValue:_formIndexContent}}' bindinput='getInputValue' bindblur='inputSearch'></input>
+      </view>
+    </view>
+
+    <!-- 列表 -->
+    <view class='content_list' wx:if='{{!inputSearch}}'>
+      <view class='sortList'>
+        <scroll-view>
+          <view wx:for='{{sortList}}' wx:key='item' class='sortList_item {{currentTab==index?"sortList_item_s":""}}' data-num='{{index}}' catchtap='swicthing'>
+            {{item.title}}
+          </view>
+        </scroll-view>
+      </view>
+      <view class='productList' wx:if='{{!isHide}}'>
+        <scroll-view>
+          <view wx:for='{{productList}}' wx:key='item' class='productList_item' catchtap='toProductInt' data-id='{{item.id}}'>
+            <view class='productList_item_img'>
+              <image src='{{item.defaultImage}}'></image>
+            </view>
+            <view class='product_info'>
+              <view class='product_info_tit'>{{item.title}}</view>
+              <view class='product_info_price'>
+                <view class='product_info_price_item'>
+                  <view class='product_info_price_item_left'>
+                    <view wx:if='{{item.enableMemberPrice}}' style='margin-right:10rpx;'>
+                      <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/index/vvv.png'></image>
+                    </view>
+                    <view style='font-weight: bold;'>
+                      <text style='font-size:20rpx;'>￥</text>{{item.price}}
+                    </view>
+                  </view>
+                  <view class='product_info_price_item_right'>
+                    <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/index/%E5%9C%86%E8%A7%92%E7%9F%A9%E5%BD%A2%206%20%E6%8B%B7%E8%B4%9D%402x.png' catchtap='addCart' data-id='{{item.id}}'></image>
+                  </view>
+                </view>
+              </view>
+            </view>
+          </view>
+        </scroll-view>
+      </view>
+      <view wx:else style='display:flex;justify-content: center;width:100%;padding-top:20%'>
+        <image style='width:303rpx;height:239rpx;' src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/product/common.png' mode='widthFix'></image>
+      </view>
+    </view>
+
+    <view class='content_lists' wx:if='{{inputSearch}}'>
+      <view catchtap='clearproductLists'>
+        <view class="clearBtn">清除列表</view>
+      </view>
+      <scroll-view>
+        <view wx:for='{{productLists}}' wx:key='item' class='productList_items' catchtap='toProductInt' data-id='{{item.id}}'>
+          <view class='productList_item_imgs'>
+            <image src='{{item.defaultImage}}'></image>
+          </view>
+          <view class='product_infos'>
+            <view class='product_infos_tit'>{{item.title}}</view>
+            <view class='product_infos_price'>
+              <view class='product_infos_price_item'>
+                <view class='product_infos_price_item_left'>
+                  <view wx:if='{{item.enableMemberPrice}}' style='margin-right:10rpx;'>
+                    <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/index/vvv.png'></image>
+                  </view>
+                  <view style='font-weight: bold;'>
+                    <text style='font-size:20rpx;'>￥</text>{{item.price}}
+                  </view>
+                </view>
+                <view class='product_infos_price_item_right'>
+                  <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/index/%E5%9C%86%E8%A7%92%E7%9F%A9%E5%BD%A2%206%20%E6%8B%B7%E8%B4%9D%402x.png' catchtap='addCart' data-id='{{item.id}}'></image>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+
+
+  </view>
+</view>

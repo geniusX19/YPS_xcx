@@ -1,0 +1,432 @@
+/* pages/product/product.wxss */
+
+/* 全局页面样式 */
+
+page {
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  background-color: #ededee;
+}
+
+.view-page {
+  height: 100%;
+  width: 100%;
+  left: 0;
+  top: 0;
+  box-sizing: border-box;
+  position: absolute;
+  overflow: hidden;
+}
+
+.page-content {
+  box-sizing: border-box;
+  position: relative;
+  overflow-y: auto;
+}
+
+
+/* 顶部图片轮播 */
+
+.swiper_item {
+  width: 100%;
+  height: 750rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.slide-image {
+  width: 750rpx;
+  height: 750rpx;
+}
+
+/* 商品信息 */
+
+.product_info {
+  width: 92%;
+  display: flex;
+  background-color: white;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 30rpx;
+}
+
+.product_tit {
+  width: 100%;
+  font-size: 30rpx;
+  font-weight: bold;
+  margin-bottom: 5rpx;
+}
+
+.product_price {
+  padding: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin-top: 20rpx;
+}
+
+.left {
+  width: 100%;
+  height: 50rpx;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.content{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.right {
+  width: 20%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.left image{
+  width: 44rpx;
+  height: 30rpx;
+}
+
+.right image {
+  width: 158rpx;
+  height: 44rpx;
+}
+
+.content image{
+  width: 30rpx;
+  height: 30rpx;
+}
+
+/* 宣传标语 */
+
+.propaganda {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50rpx;
+}
+
+.propaganda image {
+  width: 750rpx;
+  height: 60rpx;
+}
+
+/* 产品详情 */
+
+.product_detail {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+}
+
+.product_detail_tit {
+  padding: 30rpx;
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.product_detail_img {
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.product_detail_img image {
+  width: 100%;
+}
+
+/* 秒杀 */
+
+.limit{
+  width: 100%;
+  background-color: white;
+  box-sizing: border-box;
+  padding: 30rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  font-size: 30rpx;
+  margin-bottom: 30rpx;
+}
+
+.limit image{
+  width: 32rpx;
+  height: 32rpx;
+  margin-right: 20rpx;
+}
+
+.limit_top{
+  width: 100%;
+  height: 50rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.limit_buttom{
+  width: 100%;
+  height: 50rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+/* 拼团 */
+
+.spell{
+  width: 100%;
+  background-color: white;
+  box-sizing: border-box;
+  padding: 30rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 30rpx;
+  border-bottom: 2rpx solid #E6E6E6;
+}
+
+.spell_one{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+}
+
+.spell_one_top{
+  width: 90rpx;
+  height: 40rpx;
+  border: 2rpx solid #41BA53;
+  color: #41BA53;
+  border-radius: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10rpx;
+}
+
+.spell_one_buttom{
+  /* color: #F10202; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spell_two{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  font-size: 24rpx;
+}
+
+.spell_three{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  font-size: 24rpx;
+}
+
+.spell_three_top{
+
+}
+
+.spell_three_buttom{
+  font-size: 20rpx;
+}
+
+.spell_four{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 140rpx;
+  height: 50rpx;
+  background-color: #41BA53;
+  color: white;
+  font-size: 24rpx;
+  border-radius: 26rpx;
+}
+
+
+/* 秒杀类底部导航栏 */
+
+.location{
+  width: 100%;
+  height: 100rpx;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: 24rpx;
+  color: #666666;
+  position: fixed;
+  bottom: 0;
+  box-shadow: 10rpx 10rpx 20rpx 10rpx #999999; 
+}
+
+.location_num{
+  margin-right: 40rpx;
+}
+
+.location text{
+  color: #E05E2C;
+  font-size: 24rpx;
+}
+
+.location_button{
+  width: 200rpx;
+  height: 80rpx;
+  border-radius: 40rpx;
+  background-color: #41BA53;
+  font-size: 30rpx;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 40rpx;
+  margin-right: 30rpx;
+}
+
+
+/* 分享框 */
+
+.share{
+  width: 750rpx;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  z-index: 999  !important;
+  box-shadow: 10rpx 10rpx 20rpx 10rpx #999999; 
+}
+
+.shareTit{
+  width: 750rpx;
+  height: 60rpx;
+  border-bottom: 2rpx solid #c4c4c4;
+  font-size: 30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 30rpx;
+  box-sizing: border-box;
+}
+
+.shareColse{
+  width: 750rpx;
+  height: 80rpx;
+  color: rgb(49, 145, 235);
+  border-top: 2rpx solid #c4c4c4;
+  font-size: 30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.shareView{
+  width: 750rpx;
+  height: 250rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn1{
+  width: 100%;
+  height: 200rpx;
+  margin-top: 20rpx;
+  background-color: white;
+  color: #999999;
+  border-radius: 0rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 30rpx;
+}
+
+.btnImg {
+  width: 50rpx;
+  height: 50rpx;
+}
+
+.btn1::after {
+  border: 0; 
+}
+
+ .btn2 {
+  width: 100%;
+  height: 200rpx;
+  margin-top: 20rpx;
+  background-color: white;
+  color: #999999;
+  border-radius: 0rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 30rpx;
+ }
+
+ .btn2::after {
+  border: 0; 
+}
+
+.zan-dialog__mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0);
+  display: none;
+}
+
+.zan-dialog__container {
+  position: fixed;
+  bottom: 45rpx;
+  width: 100%;
+  height: 350rpx;
+  /* margin-left: 50rpx; */
+  background: #f8f8f8;
+  transform: translateY(300%);
+  transition: all 0.4s ease;
+  z-index: 12;
+  border-radius: 20rpx;
+}
+
+.zan-dialog--show .zan-dialog__container {
+  transform: translateY(0);
+}
+
+.zan-dialog--show .zan-dialog__mask {
+  display: block;
+}
+.canvas-box{
+  width: 100%;
+  position: fixed;
+  left: 0;
+  top: 999999rpx;
+}

@@ -1,0 +1,50 @@
+<!-- pages/recharge/recharge.wxml -->
+<view class='view-page'>
+  <navbar page-name1="充值会员"></navbar>
+  <view class='page-content' style='height:calc(100vh - {{navH}}px)'>
+    <!-- 顶部标题 -->
+    <view class='top'>
+      钱包余额：
+      <text style='color:#F74603'>￥{{AccountInfo.remainMoney}}</text>
+    </view>
+    <!-- 充值选项列表 -->
+    <view class='content_body'>
+      <view class='content_list' wx:for='{{amounts}}' wx:key='item'>
+        <view class='content_item {{tab == index ? "backgroud_img_select":"backgroud_img_noselect"}}' catchtap='chooseList' data-index='{{index}}'>
+          {{item}}
+        </view>
+      </view>
+    </view>
+    <!-- 清楚浮动 -->
+    <view style='clear: both'></view>
+    <!-- 手动输入框 -->
+    <view class='enter'>
+      <view>其他充值金额</view>
+      <view class='inputstyle'>
+        <input bindfocus='clear' bindinput='getInput' bindblur='delInput' placeholder='请输入充值金额' placeholder-class='input_style' value='{{chooseList?"":money}}'></input>
+      </view>
+      <view>元</view>
+    </view>
+    <view class="detailedTitle">充值明细</view>
+    <view class="detailedList">
+      <view class="detailed">
+        <view class="listName">充值金额：</view>
+        <view class="listmoney">{{rechargeAmount}}</view>
+      </view>
+
+      <view class="detailed">
+        <view class="listName">优惠金额：</view>
+        <view class="listmoney">{{discountAmount}}</view>
+      </view>
+
+      <view class="detailed">
+        <view class="listName">支付金额：</view>
+        <view class="listmoney">{{finalAmount}}</view>
+      </view>
+    </view>
+    <!-- 确认充值按钮 -->
+    <view class='buttons'>
+      <button disabled="{{frozen == false?false:true}}" catchtap='recharge'>立即充值</button>
+    </view>
+  </view>
+</view>

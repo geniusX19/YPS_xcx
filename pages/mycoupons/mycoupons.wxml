@@ -1,0 +1,66 @@
+<!-- pages/mycoupons/mycoupons.wxml -->
+<view class='view-page'>
+  <navbar page-name1="我的优惠券"></navbar>
+  <view class='page-content' style='height:calc(100vh - {{navH}}px)'>
+    <!-- 顶部标签页 -->
+    <view class='current'>
+      <view wx:for='{{currentArry}}' wx:key='item' style='width:100%' catchtap='navtap' data-num='{{index}}'>
+        <view class='item'>
+          <text class='{{currentTab == index ? "buttom_linear":""}}'>{{item.text}}</text>
+        </view>
+      </view>
+    </view>
+    <!-- 可使用优惠券框 -->
+    <scroll-view scroll-y bindscrolltolower='onReachBottom' lower-threshold="40" style='height:calc(100vh - {{navHs}}px)' wx:if='{{currentTab == 0}}'>
+      <view class='coupons' wx:for='{{CouponList}}' wx:key='item' data-id='{{item.id}}' data-goodsLimit='{{item.goodsLimit}}' catchtap='useCoupons'>
+        <view class='coupons_top'>
+          <view class='coupons_top_left'>
+            {{item.couponType == "DISCOUNT"?item.discountProperty:item.money}}
+            <view class="moneySysbol">{{item.couponType == "DISCOUNT"?"折":"元"}}</view>
+          </view>
+          <view class='coupons_top_right'>
+            {{item.couponType == 'DISCOUNT' ?'最高优惠'+item.discountMoneyLimit+'元' : item.couponType == "NOSILL" ? "无门槛直抵" + item.money + "元" : "满" + item.fullMoneyLimit + "元减" + item.money+ "元" }}
+          </view>
+        </view>
+        <view class='coupons_buttom'>
+          <!-- {{item.couponExpireType == "RELATIVE"?'自领取至'+item.duration+'过期':'有效期：'+item.startDate + '至' + item.endDate}} -->
+          有效期：{{item.couponExpireType == "RELATIVE"?item.drawDate:item.startDate}}至{{item.endTime}}
+        </view>
+      </view>
+    </scroll-view>
+    <!-- 已使用优惠券框 -->
+    <scroll-view scroll-y bindscrolltolower='onReachBottom' lower-threshold="40" style='height:calc(100vh - {{navHs}}px)' wx:if='{{currentTab == 1}}'>
+      <view class='couponsH' wx:for='{{CouponList}}' wx:key='item'>
+        <view class='coupons_topH'>
+          <view class='coupons_top_leftH'>
+            {{item.couponType == "DISCOUNT"?item.discountProperty:item.money}}
+            <view class="moneySysbol">{{item.couponType == "DISCOUNT"?"折":"元"}}</view>
+          </view>
+          <view class='coupons_top_rightH'>
+            {{item.couponType == 'DISCOUNT' ?'最高优惠'+item.discountMoneyLimit+'元': item.couponType == "NOSILL" ? "无门槛直抵" + item.money + "元" : "满" + item.fullMoneyLimit + "元减" + item.money+ "元" }}
+          </view>
+        </view>
+        <view class='coupons_buttomH'>
+          有效期：{{item.couponExpireType == "RELATIVE"?item.drawDate:item.startDate}}至{{item.endTime}}
+        </view>
+      </view>
+    </scroll-view>
+    <!-- 已过期优惠券 -->
+    <scroll-view scroll-y bindscrolltolower='onReachBottom' lower-threshold="40" style='height:calc(200vh - {{navHs}}px)' wx:if='{{currentTab == 2}}'>
+      <view class='couponsH' wx:for='{{CouponList}}' wx:key='item'>
+        <view class='coupons_topH'>
+          <view class='coupons_top_leftH'>
+            {{item.couponType == "DISCOUNT"?item.discountProperty:item.money}}
+            <view class="moneySysbol">{{item.couponType == "DISCOUNT"?"折":"元"}}</view>
+          </view>
+          <view class='coupons_top_rightH'>
+            {{item.couponType == 'DISCOUNT' ?'最高优惠'+item.discountMoneyLimit+'元': item.couponType == "NOSILL" ? "无门槛直抵" + item.money + "元" : "满" + item.fullMoneyLimit + "元减" + item.money+ "元" }}
+          </view>
+        </view>
+        <view class='coupons_buttomH'>
+          有效期：{{item.couponExpireType == "RELATIVE"?item.drawDate:item.startDate}}至{{item.endTime}}
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+</view>

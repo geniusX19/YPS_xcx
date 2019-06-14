@@ -1,0 +1,4 @@
+<!--pages/template/space/space.wxml-->
+<template name='space'>
+  <view style='height:120rpx;width:100%'></view>
+</template>

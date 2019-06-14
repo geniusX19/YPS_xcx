@@ -1,0 +1,63 @@
+<!-- pages/coupons/coupons.wxml -->
+<view class='view-page'>
+  <navbar page-name1="优惠券大厅"></navbar>
+  <view class='page-content' style='height:calc(100vh - {{navH}}px)'>
+    <view class='contentList'>
+      <!-- 左侧分类列表 -->
+      <view class="sortList">
+        <scroll-view style='height: 90vh' scroll-y>
+          <view wx:for="{{sortList}}" wx:key="item" class='sortList_item {{currentTab==index?"sortList_item_s":""}}' data-num='{{index}}' catchtap='sortListTap'>
+            {{item.title}}
+          </view>
+        </scroll-view>
+      </view>
+      <view class="productList">
+        <!-- 顶部标签页 -->
+        <view class='current'>
+          <view class='sTab' wx:for='{{currentArry}}' wx:key='item' catchtap='navTap' data-num='{{index}}'>
+            <view class='item'>
+              <text class='{{currentTabR == index ? "buttom_linear":""}}'>{{item.title}}</text>
+            </view>
+          </view>
+        </view>
+        <scroll-view style='height: 82vh' scroll-y lower-threshold="40" bindscrolltolower="onReachBottom">
+          <!-- tab1 -->
+          <view class="productList_item" wx:for="{{couponsList}}" wx:key="item" wx:if="{{currentTabR == 0}}" catchtap='editor' data-id='{{item.id}}'>
+            <view class="couponInfor">
+              <view class="money">
+                <!-- <view class="moneySysbol"></view> -->
+                {{item.couponType == "DISCOUNT"?item.discountProperty:item.money}}
+                <view class="moneySysbol">{{item.couponType == "DISCOUNT"?"折":"元"}}</view>
+              </view>
+              <view class="couponName">{{item.name}}</view>
+              <view class="infor">{{item.couponType == "FULL_REDUCE"?'满'+item.fullMoneyLimit+'元立减'+item.money+'元':item.couponType == "NOSILL"?'无门槛直减'+item.money+'元':'最高优惠'+item.discountMoneyLimit+'元'}}</view>
+            </view>
+            <!-- <view class="time">有效期：***至***</view> -->
+            <view class="time">{{item.couponExpireType == "RELATIVE"?'自领取后'+item.duration+'过期':item.startDate + '至' + item.endDate}}</view>
+
+          </view>
+          <!-- tab2 -->
+          <view class="appoint_item" wx:for="{{couponsList}}" wx:key="item" wx:if="{{currentTabR == 1}}">
+            <view class="">
+              <view class="appoint_top">
+                <view class="appoint_money">{{item.couponType == "DISCOUNT"?item.discountProperty:item.money}}
+                  <view class="moneySysbol">{{item.couponType == "DISCOUNT"?"折":"元"}}</view>
+                </view>
+                <view class="appoint_btn" catchtap='editor' data-id='{{item.id}}'>领取</view>
+                <view class="appoint_timeName">{{item.couponExpireType == "RELATIVE"?'自领取后':'有效期：'+item.startDate}}</view>
+                <view class="appoint_time">{{item.couponExpireType == "RELATIVE"?item.duration+'过期':'至：'+item.endDate}}</view>
+              </view>
+              <view class="appoint_bottom">
+                <view class="appoint_imgBox">
+                  <image src='{{item.goods.defaultImage}}'></image>
+                </view>
+                <view class="appointName">{{item.goods.introduction}}</view>
+              </view>
+            </view>
+            
+          </view>
+        </scroll-view>
+      </view>
+    </view>
+  </view>
+</view>

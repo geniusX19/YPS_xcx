@@ -1,0 +1,109 @@
+/* pages/template/login/login.wxss */
+
+/* 登陆样式 */
+.login_mask {
+    background: rgba(0, 0, 0, 0.4);
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1996;
+    display: flex;
+    align-items: center;
+}
+ 
+.login_main {
+    width: 652rpx;
+    height: 800rpx;
+    background: #f8f8f9;
+    margin: 0 auto;
+    /* margin-top: 100rpx; */
+    border-radius: 10rpx;
+    position: relative;
+    text-align: center;
+}
+ 
+.login_main .icon-guanbi {
+    position: absolute;
+    right: 40rpx;
+    top: 40rpx;
+    z-index: 88;
+    font-size: 40rpx;
+}
+ 
+.login_main .logo {
+    width: 60rpx;
+    height: 60rpx;
+    border-radius: 50%;
+    margin: 42rpx 0;
+}
+ 
+.login_main .title {
+    font-size: 28rpx;
+    color: #00274b;
+}
+ 
+.login_main .email {
+    width: 544rpx;
+    height: 88rpx;
+    border: 1px solid #bbc9d6;
+    margin: 0 auto;
+    border-radius: 44rpx;
+    text-align: left;
+    padding-left: 32rpx;
+    margin-top: 40rpx;
+}
+ 
+.login_main .password {
+    width: 544rpx;
+    height: 88rpx;
+    border: 1px solid #bbc9d6;
+    margin: 0 auto;
+    border-radius: 44rpx;
+    text-align: left;
+    padding-left: 32rpx;
+    margin-top: 40rpx;
+}
+ 
+.login_main .eye {
+    position: absolute;
+    width:100rpx;
+    height: 88rpx;
+    right: 50rpx;
+    top: 17rpx;
+    z-index: 150;
+}
+ 
+.forget {
+    height: 80rpx;
+    line-height: 80rpx;
+    color: #03a9f4;
+    font-size: 24rpx;
+}
+ 
+.termsOfService {
+    font-size: 24rpx;
+    color: #97a7b7;
+    margin-top: 48rpx;
+}
+ 
+.noAccount {
+    font-size: 24rpx;
+    color: #97a7b7;
+    margin-top: 38rpx;
+}
+.service,.register{
+    color:#03a9f4;
+}
+ 
+.submit {
+    width: 544rpx;
+    height: 88rpx;
+    line-height: 88rpx;
+    border-radius: 44rpx;
+    /* background: #93d6f8; */
+    background:#03a9f4; 
+    color: #fff;
+    font-size: 34rpx;
+}

@@ -1,0 +1,234 @@
+/* pages/order/order.wxss */
+
+/* 顶部公用组件 */
+
+.view-page {
+  height: 100%;
+  width: 100%;
+  left: 0;
+  top: 0;
+  box-sizing: border-box;
+  position: absolute;
+  overflow: hidden;
+}
+
+.page-content {
+  box-sizing: border-box;
+  position: relative;
+  overflow-y: auto;
+}
+
+/* 页面全局样式 */
+page{
+  background-color: #ededee
+}
+
+/* 顶部标签页 */
+
+.current{
+  width: 100%;
+  background-color: white;
+  height: 80rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #333333;
+  font-size: 30rpx;
+  margin-bottom: 15rpx;
+}
+
+.item{
+  width: 100%;
+  text-align: center;
+}
+
+.buttom_linear{
+  color: #41BA53;
+  display: inline-block;
+  line-height: 50rpx;
+  height: 50rpx;
+  border-bottom: 2rpx solid #41BA53;
+}
+
+/* 订单内容页 */
+
+.orderPage{
+  width: 630rpx;
+  /* height: 412rpx; */
+  margin: 15rpx auto;
+  background-color: white;
+  border-radius: 20rpx;
+  padding: 30rpx;
+}
+
+.orderPage_tit{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.orderPage_tit_left{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.orderPage_tit_left_item_left{
+  height: 30rpx;
+  border-left: 4rpx solid #41BA53;
+  margin-right: 10rpx;
+}
+
+.orderPage_tit_left_item_right{
+  font-size: 30rpx;
+}
+
+.orderPage_tit_right{
+  font-size: 30rpx;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.orderPage_tit_right_item{
+  color: #ED7425;
+}
+
+.orderPage_content{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 30rpx;
+}
+
+.orderPage_content_top{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.orderPage_content_left{
+  margin-right: 30rpx;
+}
+
+.orderPage_content_left image{
+  width: 180rpx;
+  height: 180rpx;
+}
+
+.orderPage_content_right{
+  flex: 1;
+}
+.desc{
+  width: 440rpx;
+  margin-top: 60rpx;
+  font-size: 22rpx;
+  color: #666;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.orderPage_content_content{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.orderPage_content_tit{
+  width: 262rpx;
+  display: inline-block;
+  font-size: 24rpx;
+  color: #333333;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  word-break: break-all;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.orderPage_content_price{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  position: relative;
+}
+
+.orderPage_content_price text{
+  font-size: 28rpx;
+}
+
+.num{
+  position: absolute;
+  top: 40rpx;
+  right: 0;
+}
+
+.orderPage_content_buttom{
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  font-size: 28rpx;
+  margin-top: 30rpx;
+}
+
+.orderPage_buttom{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  font-size: 30rpx;
+  margin-top: 30rpx;
+}
+
+.orderPage_buttom view{
+  border: 1rpx solid #666666;
+  border-radius: 30rpx;
+  width: 150rpx;
+  height: 60rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-main{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,.5)
+}
+.popup-content{
+  margin: 400rpx auto 0;
+  width: 90%;
+  border-radius: 10rpx;
+  background: #fff;
+}
+.popup-btn{
+  display: flex;
+}
+.popup-btn .btn{
+  text-align: center;
+  height: 100rpx;
+  line-height: 100rpx;
+  border-top: 1px solid #ccc;
+  width: 50%;
+}
+.popup-btn .btn:first-child{
+  border-right: 1px solid #ccc;
+}
+.popup-text{
+  box-sizing: border-box;
+  padding: 20rpx;
+  font-size: 28rpx;
+}

@@ -1,0 +1,104 @@
+/* pages/searchQuery/searchQuery.wxss */
+
+/* 全局组件样式 */
+
+page {
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  background-color: #ededee;
+}
+
+.view-page {
+  height: 100%;
+  width: 100%;
+  left: 0;
+  top: 0;
+  box-sizing: border-box;
+  position: absolute;
+  overflow: hidden;
+}
+
+.page-content {
+  box-sizing: border-box;
+  position: relative;
+  overflow-y: auto;
+}
+
+/* 顶部标签页 */
+
+.current{
+  width: 100%;
+  background-color: white;
+  height: 80rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #333333;
+  font-size: 30rpx;
+  margin-bottom: 15rpx;
+}
+
+.item{
+  width: 100%;
+  text-align: center;
+}
+
+.buttom_linear{
+  color: #41BA53;
+  display: inline-block;
+  line-height: 50rpx;
+  height: 50rpx;
+  border-bottom: 2rpx solid #41BA53;
+}
+
+/* 输入框 */
+
+.inputBody{
+  width: 630rpx;
+  padding: 30rpx;
+  background-color: white;
+  border-radius: 20rpx;
+  margin: 20rpx auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.inputBody input{
+  box-sizing: border-box;
+  background-color:#EEEEEF;
+  border: 2rpx solid #BDBCBC; 
+  border-radius: 40rpx;
+  margin-top: 50rpx;
+  padding-left: 40rpx;
+  width: 600rpx;
+  min-height: 80rpx;
+}
+
+.inputStyle{
+  font-size: 30rpx;
+  /* margin-left: 20rpx; */
+  color: #959595;
+}
+
+
+
+/* 按钮 */
+
+.add-address {
+  margin: 0 auto;
+  margin-top: 30px;
+  margin-bottom: 50rpx;
+  width: 600rpx;
+  height: 80rpx;
+  border-radius: 40rpx;
+  line-height: 80rpx;
+  text-align: center;
+  color: white;
+  display: block;
+  background-color: #41BA53;
+  font-size: 36rpx;
+}

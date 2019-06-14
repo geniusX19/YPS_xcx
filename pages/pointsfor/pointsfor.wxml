@@ -1,0 +1,111 @@
+<!--pages/pointsfor/pointsfor.wxml-->
+<view class='view-page'>
+  <navbar page-name1="积分兑换"></navbar>
+  <view class='page-content' style='height:calc(100vh - {{navH}}px)'>
+    <!--顶部标签页-->
+    <view class='current'>
+      <view wx:for='{{currentArry}}' wx:key='item' style='width:100%' catchtap='navtap' data-num='{{index}}'>
+        <view class='item'>
+          <text class='{{currentTab == index ? "buttom_linear":""}}'>{{item.text}}</text>
+        </view>
+      </view>
+    </view>
+
+
+    <!-- 商品列表 -->
+    <view class='productList' wx:if='{{currentTab == 0}}'>
+      <scroll-view>
+        <view wx:for='{{productList}}' wx:key='item' class='productList_item' catchtap='toviews'>
+          <view class='productList_item_img'>
+            <image src='{{item.goods.defaultImage}}'></image>
+          </view>
+          <view class='product_info'>
+            <view class='product_info_tit'>{{item.goods.title}}</view>
+            <view class='product_info_price'>
+              <view class='product_info_price_item'>
+                <text>{{item.needIntegral}}积分</text>
+                <text style='color:#999999;font-size:25rpx;margin-left:15rpx;'>￥{{item.goods.price}}</text>
+              </view>
+              <view class='buttons' catchtap='performExchange' data-id='{{item.id}}'>
+                <view>立即兑换</view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+
+    <!-- 现金券兑换 -->
+
+    <view class='cash' wx:if='{{currentTab == 1}}'>
+      <view wx:for='{{cashCoupons}}' wx:key='item' class='cash_item'>
+        <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/recharge/limit.png' class='limit' wx:if='{{item.template.goodsLimit == "SINGLETON"}}'></image>
+        <view class='cash_item_top {{item.template.couponType == "DISCOUNT"?"cash_item_top_DISCOUNT":"cash_item_top_NOSILL_FULL_REDUCE"}}'>{{item.template.couponType == 'DISCOUNT'?item.template.discountProperty+'折':item.template.money+'元'}}</view>
+        <view class='cash_item_content' wx:if='{{item.template.goodsLimit == "ALL"}}'>
+          {{item.template.couponType == 'DISCOUNT'?item.template.discountProperty+'折':item.template.couponType == 'NOSILL' ? item.template.money+'元无门槛券':'满'+item.template.fullMoneyLimit+'减'+item.template.money+'元'}}
+        </view>
+        <view wx:else class='cash_item_contents'>
+          <view class='cash_item_contents_left'>
+            {{item.template.couponType == 'DISCOUNT'?item.template.discountProperty+'折':item.template.couponType == 'NOSILL' ? item.template.money+'元无门槛券':'满'+item.template.fullMoneyLimit+'减'+item.template.money+'元'}}
+          </view>
+          <view class='cash_item_contents_right' catchtap='toggleDialog' data-id='{{item.template.goodsId}}'>查看</view>
+        </view>
+        <view class=' cash_item_buttom '>
+          <view class='cash_item_buttom_left '>{{item.needIntegral}}</view>
+          <view class='cash_item_buttom_right ' catchtap='performExchange ' data-id='{{item.id}} '>立即兑换</view>
+        </view>
+      </view>
+    </view>
+
+
+    <!-- 兑换记录 -->
+
+    <view class='record' wx:if='{{currentTab == 2}}'>
+      <view wx:for='{{exchangeRecord}}' wx:key='item' class='record_item '>
+        <view class='record_left '>
+          <view class='record_left_top'>{{item.type == 'GOODS'?item.goods.title:item.template.name}}</view>
+          <view class='record_left_buttom '>{{item.createDate}}</view>
+        </view>
+        <view class='record_right '>-{{item.usedIntegral}}</view>
+      </view>
+    </view>
+
+
+    <!-- 商品详情弹框 -->
+    <view class="zan-dialog {{ showDialog ? 'zan-dialog--show ' : ' ' }}">
+      <view class="zan-dialog__mask" bindtap="toggleDialog" />
+      <view class="zan-dialog__container">
+        <swiper indicator-dots="true" autoplay="true" interval="5000" duration="500" class='swiper_item '>
+            <block wx:for="{{productCarousel}}" wx:key='item '>
+              <swiper-item>
+                <image src="{{item}}" class="slide-image" />
+              </swiper-item>
+            </block>
+          </swiper>
+          <view class='product_info '>
+            <view class='product_tit '>
+              {{product.title}}
+            </view>
+            <view class='product_price ' wx:if='{{loadFlag=="product" }} '>
+              <view class='content '>
+                <view style='display:flex;flex-direction: row;justify-content: center;align-items: center; '>
+                  <!-- <image style='width: 44rpx;height: 30rpx; ' src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/sort/%E4%BC%9A%E5%91%98%402x.png '></image> -->
+                  <text style='font-size:40rpx;color:#F57500; '>￥{{product.price}}</text>
+                </view>
+                <!-- <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/product/%E5%9B%BE%E5%B1%82%20158%402x.png '></image> -->
+              </view>
+              <view style='display:flex;flex-direction: row;justify-content: center;align-items: center;margin-top:20rpx; '>
+                <view class='left '>
+                  <text style='font-size:24rpx;color:#999999;margin-left:10rpx;text-decoration:line-through; '>非会员：￥{{product.price}}</text>
+                  <text style='font-size:24rpx;color:#999999;margin-left:20rpx; '>库存：{{product.stockCount}}</text>
+                </view>
+                <view class='right '>
+                  <!-- <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/product/kaitong.png '></image> -->
+                </view>
+              </view>
+            </view>
+          </view>
+      </view>
+    </view>
+  </view>
+</view>

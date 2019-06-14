@@ -1,0 +1,10 @@
+<!--pages/components/navbar/navbar.wxml-->
+<view class="navbar" style='height:{{navH}}px'>
+  <view class="navbar-action-wrap  {{showHome ? 'navbar-action-group' : ''}} row item-center" wx:if="{{showNav}}" catchtap='navBack'>
+    <image class='navbar-img' src='/imgs/back.png'></image>
+  </view>
+  <view class='navbar-title'>
+    <text catchtap='switchTit' data-index='0' style='margin-right:20rpx; {{tab == 0 ? "color:white":"color:black;opacity: 0.5;font-size: 15px;"}}'>{{pageName1}}</text>
+    <text catchtap='switchTit' data-index='1' style='margin-left:20rpx; {{tab == 1 ? "color:white":"color:black;opacity: 0.5;font-size: 15px;"}}'>{{pageName2}}</text>
+  </view>
+</view>

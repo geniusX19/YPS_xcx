@@ -1,0 +1,64 @@
+<!--pages/template/login/login.wxml-->
+<!--登陆模态框-->
+<template name="login">
+  <view class="login_mask" wx:if="{{logShow}}">
+    <view class="login_main">
+      <icon class="iconfont icon-guanbi close" bindtap='close'></icon>
+      <image class="logo" src='/imgs/tarImg/home_s.png'></image>
+      <view class="title">去{{'Laicode'}}做题,先绑定Laicode账号</view>
+      <view style="position:relative;">
+        <label>
+          <input class="email" type="text" placeholder='Email' bindinput='getEmail' placeholder-style="color:#bbc9d6;font-size:28rpx;">
+          </input>
+        </label>
+      </view>
+      <view style="position:relative;">
+        <label>
+          <input name="password" class="password" placeholder="Password" password="{{showpass}}" value="{{password}}" bindinput='getPassWord' placeholder-style="color:#bbc9d6;font-size:28rpx;">
+          </input>
+        </label>
+        <text bindtap='switchEye' class="iconfont icon-mima:before"></text>
+        <!-- <icon wx:if="{{!eye}}" class="iconfont ."></icon> -->
+      </view>
+      <view class="forget">忘记密码</view>
+      <button class="submit">绑定</button>
+      <view class="termsOfService">使用laicode账号 则同意我们
+        <text class="service">服务条款</text>
+      </view>
+      <view class="noAccount">没有laicode账号？
+        <text class="register">立即注册</text>
+      </view>
+    </view>
+  </view>
+</template>
+
+
+<view class="login_mask" wx:if="{{logShow}}">
+  <view class="login_main">
+    <icon class="iconfont icon-guanbi close" bindtap='close'></icon>
+    <image class="logo" src='/imgs/tarImg/home_s.png'></image>
+    <view class="title">去{{'Laicode'}}做题,先绑定Laicode账号</view>
+    <view style="position:relative;">
+      <label>
+        <input class="email" type="text" placeholder='Email' bindinput='getEmail' placeholder-style="color:#bbc9d6;font-size:28rpx;">
+        </input>
+      </label>
+    </view>
+    <view style="position:relative;">
+      <label>
+        <input name="password" class="password" placeholder="Password" password="{{showpass}}" value="{{password}}" bindinput='getPassWord' placeholder-style="color:#bbc9d6;font-size:28rpx;">
+        </input>
+      </label>
+      <icon bindtap='switchEye' class="iconfont-nav eye {{eye?'icon-na-close':'icon-na-open'}}"></icon>
+      <!-- <icon wx:if="{{!eye}}" class="iconfont ."></icon> -->
+    </view>
+    <view class="forget">忘记密码</view>
+    <button class="submit">绑定</button>
+    <view class="termsOfService">使用laicode账号 则同意我们
+      <text class="service">服务条款</text>
+    </view>
+    <view class="noAccount">没有laicode账号？
+      <text class="register">立即注册</text>
+    </view>
+  </view>
+</view>

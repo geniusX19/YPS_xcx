@@ -1,0 +1,93 @@
+<!--pages/order/order.wxml-->
+
+<view class='view-page'>
+  <navbar page-name1="订单中心"></navbar>
+  <view class='page-content' style='height:calc(100vh - {{navH}}px)'>
+    <!--顶部标签页-->
+    <view class='current'>
+      <view wx:for='{{currentArry}}' wx:key='item' style='width:100%' catchtap='navtap' data-num='{{index}}'>
+        <view class='item'>
+          <text class='{{currentTab == index ? "buttom_linear":""}}'>{{item.text}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 订单信息 -->
+
+    <scroll-view scroll-y="true" bindscrolltolower="onReachBottom" lower-threshold="5" style='height:84vh'>
+      <view wx:for='{{orderList}}' wx:key='{{index}}' class='orderPage' >
+        <view class='orderPage_tit'>
+          <view class='orderPage_tit_left'>
+            <view class='orderPage_tit_left_item_left'></view>
+            <view class='orderPage_tit_left_item_right'>自营商品</view>
+          </view>
+          <view class='orderPage_tit_right'   wx:if='{{item.order.orderStatus === "UNPAYED"}}'>
+            <text class='orderPage_tit_right_item'>等待买家付款</text>
+          </view>
+          <view class='orderPage_tit_right'   wx:if='{{item.order.orderStatus === "CANCEL"}}'>
+            <text class='orderPage_tit_right_item'>已取消</text>
+          </view>
+          <view class='orderPage_tit_right'   wx:if='{{item.order.orderStatus === "GROUPING"}}'>
+            <text class='orderPage_tit_right_item'>拼团中</text>
+          </view>
+          <view class='orderPage_tit_right'   wx:if='{{item.order.orderStatus === "WAITSEND"}}'>
+            <text class='orderPage_tit_right_item'>待接单</text>
+          </view>
+          <view class='orderPage_tit_right'   wx:if='{{item.order.orderStatus === "WAITRECEIVE"}}'>
+            <text class='orderPage_tit_right_item'>待收货</text>
+          </view>
+
+
+        </view>
+        <view class='orderPage_content'>
+          <view class='orderPage_content_top' wx:for="{{item.orderItemList}}" wx:for-item="orderitem" wx:key="{{orderindex}}" wx:for-index="{{orderindex}}">
+            <view class='orderPage_content_left'>
+              <image src='{{orderitem.image}}'></image>
+            </view>
+            <view class='orderPage_content_right'>
+              <view class='orderPage_content_content'>
+                <view class='orderPage_content_tit'>
+                  {{orderitem.title}}
+                </view>
+                <view class='orderPage_content_price'>
+                  <text>￥{{orderitem.price}}</text>
+                  <text class='num'>x{{orderitem.num}}</text>
+                </view>
+              </view>
+              <view class='desc'>{{orderitem.introduction}}</view>
+            </view>
+            
+          </view>
+          <view class='orderPage_content_buttom'>
+            <text>共{{item.orderItemList.length}}件商品 合计：</text>
+            <text style='color:#ED7425'>￥{{item.order.totalMoney}}</text>
+          </view>
+        </view>
+        <view class='orderPage_buttom' >
+          <view style='border: 1rpx solid #666666;' wx:if='{{item.order.orderStatus === "UNPAYED"}}' data-index="{{index}}" catchtap="cancelOrderClick" >
+            取消订单
+          </view>
+          <view style='border: 1rpx solid #41BA53;color:#41BA53;margin-left:30rpx;' data-index="{{index}}" wx:if="{{item.order.orderStatus === 'UNPAYED'}}">付款</view>
+          <view style='border: 1rpx solid #41BA53;color:#41BA53;margin-left:30rpx;' data-index="{{index}}" catchtap='refundClick'  wx:if="{{item.order.orderStatus === 'WAITSEND'}}">申请退款</view>
+          <view style='border: 1rpx solid #41BA53;color:#41BA53;margin-left:30rpx;' data-index="{{index}}" wx:if="{{item.order.orderStatus === 'WAITRECEIVE'}}">确认收货</view>
+        </view>
+      </view>
+    </scroll-view>
+
+    <!-- 宣传标题 -->
+
+
+    <!-- 产品详情图 -->
+
+  </view>
+</view>
+
+<view class='popup-main' wx:if="{{isShow}}">
+  <view class='popup-content'>
+    <textarea class='popup-text' bindinput='popupTextClick' placeholder='申请退款原因'></textarea>
+    <view class='popup-btn'>
+      <view catchtap='colsePopupClick' class='btn'>取消</view>
+      <view catchtap='confirmPopupClick' class='btn'>提交</view>
+    </view>
+  </view>
+</view>

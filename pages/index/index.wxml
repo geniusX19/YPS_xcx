@@ -1,0 +1,168 @@
+<!--index.wxml-->
+<!-- <view class="container">
+  <view class="userinfo">
+    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
+    <block wx:else>
+      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+    </block>
+  </view>
+  <view class="usermotto">
+    <text class="user-motto">{{motto}}</text>
+  </view>
+</view> -->
+
+<view class='view-page'>
+  <navbar page-name="皖垦农产品"></navbar>
+  <view class='page-content' style='height:calc(100vh - {{navH}}px)'>
+    <!-- 背景框 -->
+    <image class='index_bg' src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/index/index.png'></image>
+    <!--顶部搜索框-->
+    <view class='search'>
+      <view class='address' catchtap='openOrClose'>
+        <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/index/%E5%9B%BE%E5%B1%82%20517%402x.png'></image>
+        <text>{{store}}</text>
+      </view>
+      <view id='detail-search'>
+        <image catchtap='toSortByQuery' src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/index/%E7%9F%A2%E9%87%8F%E6%99%BA%E8%83%BD%E5%AF%B9%E8%B1%A1%402x.png'></image>
+        <input placeholder='请输入关键词进行搜索' placeholder-style='color:#ffffff;' bindinput="getQuery" bindblur='toSortByQuery'></input>
+      </view>
+    </view>
+
+    <!-- 首页轮播图 -->
+    <view class='carousel'>
+      <swiper class='carousel_item' indicator-dots='true' indicator-color='#ffffff' indicator-active-color='#b3b3b3' autoplay='true' interval='4000' circular='true'>
+        <block wx:for="{{carousels}}" wx:key="{{item}}">
+          <swiper-item catchtap='togoods' data-url='{{item.url}}' data-title='{{item.title}}'>
+            <image src='{{item.image}}'></image>
+          </swiper-item>
+        </block>
+      </swiper>
+    </view>
+
+    <!-- 首页分类列表 -->
+    <view class='category'>
+      <view class='category_item' wx:for="{{categoryList}}" wx:key="{{item}}" catchtap='toSort' data-index='{{index}}'>
+        <image src='{{item.smallImage}}'></image>
+        <view>{{item.title}}</view>
+      </view>
+    </view>
+
+    <!-- 活动专区 -->
+    <view class='activity'>
+      <view class='activity_tit'>
+        <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/index/%E5%9B%BE%E5%B1%82%20152%402x.png'></image>
+        <view class='text'>
+          活动专区
+        </view>
+      </view>
+      <view class='activity_item'>
+        <view class='activity_item_left' catchtap='tosell'>
+          <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/index/%E7%BB%84%2027%402x.png'></image>
+        </view>
+        <view class='activity_item_right'>
+          <view class='activity_item_right_top' catchtap='tospell'>
+            <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/index/%E7%BB%84%2028%402x.png'></image>
+          </view>
+          <view class='activity_item_right_bottom' catchtap='tolimit'>
+            <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/index/%E7%BB%84%2028%20%E6%8B%B7%E8%B4%9D%202%402x.png'></image>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 会员专区 -->
+
+    <view class='member'>
+      <view class='member_tit'>
+        <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/index/%E5%9B%BE%E5%B1%82%20566%402x.png'></image>
+        <view class='text'>
+          会员专区
+        </view>
+      </view>
+      <view class='member_item'>
+        <view class='member_item_left' catchtap='tomembers'>
+          <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/index/%E7%BB%84%2028%20%E6%8B%B7%E8%B4%9D%203%402x.png'>
+          </image>
+        </view>
+        <view class='member_item_right' catchtap='torecharge'>
+          <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/index/%E7%BB%84%2028%402x%281%29.png'></image>
+        </view>
+      </view>
+    </view>
+
+    <!-- 类目商品列表 -->
+
+    <view class='product' wx:for="{{productList}}" wx:key="{{item}}">
+      <view class='product_item'>
+        <view class='product_item_title' catchtap='toSort' data-index='{{index}}'>
+          <image src='{{item.image}}'></image>
+        </view>
+        <view class='product_item_contents'>
+          <view class='product_item_content' wx:for="{{item.goodsList}}" wx:key="{{item}}" catchtap='nav' data-id='{{item.id}}'>
+            <view class='product_item_content_img'>
+              <image src='{{item.defaultImage}}'></image>
+            </view>
+            <view class='product_item_content_title'>
+              <view>{{item.title}}</view>
+            </view>
+            <view class='product_item_content_price'>
+              <view class='product_item_content_price_left'>
+                <view wx:if='{{item.enableMemberPrice}}' style='margin-right:10rpx;'>
+                  <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/index/vvv.png'></image>
+                </view>
+                <view style='font-weight: bold;'>
+                  <text style='font-size:20rpx;'>￥</text>{{item.price}}
+                </view>
+              </view>
+              <view class='product_item_content_price_right'>
+                <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/index/%E5%9C%86%E8%A7%92%E7%9F%A9%E5%BD%A2%206%20%E6%8B%B7%E8%B4%9D%402x.png' catchtap='addCart' data-id='{{item.id}}'></image>
+              </view>
+            </view>
+            <!-- <view class='product_item_content_price'>
+              <view>
+                <text style='text-decoration:line-through;color:#999999;font-size:20rpx;margin-left:5rpx;'>￥{{item.price}}</text>
+              </view>
+              <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/index/%E5%9C%86%E8%A7%92%E7%9F%A9%E5%BD%A2%206%20%E6%8B%B7%E8%B4%9D%402x.png' catchtap='addCart'></image>
+            </view> -->
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 选择门店 -->
+    <!-- <view class="login_mask" wx:if="{{chooseShop}}">
+      <view class="login_mains">
+        <image class='icon-guanbi' src='/imgs/close.png' catchtap='openOrClose'></image>
+        <image class="logos" src='/imgs/logo.png'></image>
+        <view class="titles">门店列表</view>
+        <scroll-view scroll-y style='height:400rpx;'>
+          <view wx:for='{{storeList}}' wx:key='item' class='storeList'>
+            <view class='storeList_item' catchtap='selectStore' data-index='{{index}}'>{{item.addressDetail}}</view>
+          </view>
+        </scroll-view>
+      </view>
+    </view> -->
+
+    <!-- 底部tab栏 -->
+    <navbar_buttom id='navtab'></navbar_buttom>
+
+    <!-- 登录授权 -->
+    <view class="login_mask" wx:if="{{!loginShow}}">
+      <view class="login_main" wx:if="{{canIUse}}">
+        <image class="logo" src='/imgs/logo.png'></image>
+        <view class="title">良品生活，源自农垦</view>
+        <view style="position:relative;margin-top:30rpx;margin-bottom:60rpx;">
+          <label>
+            <view>申请获取以下权限</view>
+            <text style='color:#666666;font-size:25rpx;'>获得你的公开信息(昵称，头像等)</text>
+          </label>
+        </view>
+        <button class="submit" open-type="getUserInfo" bindgetuserinfo="getUserInfo">授权</button>
+      </view>
+      <view wx:else>请升级微信版本</view>
+    </view>
+  </view>
+</view>
+<!-- 顶部背景 -->
+<!-- <image class='index_bg' src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/index/%E5%9B%BE%E5%B1%82%201422%402x.png'></image> -->

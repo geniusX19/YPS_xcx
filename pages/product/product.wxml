@@ -1,0 +1,192 @@
+<!-- pages/product/product.wxml -->
+<!-- 引入公共模板 -->
+<import src="/pages/template/space/space.wxml" />
+<view class='view-page'>
+  <navbar bindeventListener="handleEventListener" id='navbar' page-name1="{{navTitName}}" page-name2="详情"></navbar>
+  <view class='page-content' style='height:calc(100vh - {{navH}}px)' wx:if='{{tabshow == 0}}'>
+    <!-- 顶部商品图片轮播 -->
+    <swiper indicator-dots="true" autoplay="true" interval="5000" duration="500" class='swiper_item'>
+      <block wx:for="{{productCarousel}}" wx:key='item'>
+        <swiper-item>
+          <image src="{{item}}" class="slide-image" />
+        </swiper-item>
+      </block>
+    </swiper>
+    <!-- 商品信息 -->
+    <view class='product_info'>
+      <view class='product_tit'>
+        {{loadFlag == "spell" || loadFlag == "limit" ? product.goods.title:product.title}}
+      </view>
+      <view class='product_price' wx:if='{{loadFlag == "product"}}'>
+        <view class='content'>
+          <view style='display:flex;flex-direction: row;justify-content: center;align-items: center;'>
+            <image style='width: 44rpx;height: 30rpx;' src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/sort/%E4%BC%9A%E5%91%98%402x.png'></image>
+            <text style='font-size:40rpx;color:#F57500;'>￥{{product.price}}</text>
+          </view>
+          <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/product/%E5%9B%BE%E5%B1%82%20158%402x.png' bindtap="share"></image>
+        </view>
+        <view style='display:flex;flex-direction: row;justify-content: center;align-items: center;margin-top:20rpx;'>
+          <view class='left'>
+            <text style='font-size:24rpx;color:#999999;margin-left:10rpx;text-decoration:line-through;'>
+              非会员：￥{{product.price}}
+            </text>
+            <text style='font-size:24rpx;color:#999999;margin-left:20rpx;'>
+              库存：{{product.stockCount}}
+            </text>
+          </view>
+          <view class='right'>
+            <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/product/kaitong.png'></image>
+          </view>
+        </view>
+      </view>
+      <view class='product_price' wx:if='{{loadFlag == "limit"}}'>
+        <view class='content'>
+          <text style='font-size:40rpx;color:#F57500;'>￥{{product.goods.price}}</text>
+          <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/product/%E5%9B%BE%E5%B1%82%20158%402x.png'></image>
+        </view>
+        <view class='left'>
+          <text style='font-size:24rpx;color:#999999;margin-left:10rpx;text-decoration:line-through;'>
+            原价：￥{{product.goods.price}}
+          </text>
+          <text style='font-size:24rpx;color:#999999;margin-left:20rpx;'>
+            库存：{{(product.goods.stockCount - product.goods.saleCount) > 0 ? (product.goods.stockCount - product.goods.saleCount):'已售罄'}}
+          </text>
+          <text style='font-size:24rpx;color:#999999;margin-left:20rpx;' wx:if='{{product.goods.enablePostPrice}}'>
+            邮费：距离计算
+          </text>
+        </view>
+      </view>
+      <view class='product_price' wx:if='{{loadFlag == "spell"}}'>
+        <view class='content'>
+          <text style='font-size:40rpx;color:#F57500;'>￥{{product.goods.price}}</text>
+          <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/product/%E5%9B%BE%E5%B1%82%20158%402x.png'></image>
+        </view>
+        <view class='left'>
+          <text style='font-size:24rpx;color:#999999;margin-left:10rpx;text-decoration:line-through;'>
+            原价：￥{{product.goods.price}}
+          </text>
+          <text style='font-size:24rpx;color:#999999;margin-left:20rpx;'>
+            库存：{{(product.goods.stockCount - product.goods.saleCount) > 0 ? (product.goods.stockCount - product.goods.saleCount):'已售罄'}}
+          </text>
+          <text style='font-size:24rpx;color:#999999;margin-left:20rpx;' wx:if='{{product.goods.enablePostPrice}}'>
+            邮费：距离计算
+          </text>
+        </view>
+      </view>
+    </view>
+    <!-- 宣传标题 -->
+    <view class='propaganda'>
+      <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/product/%E8%A3%85%E9%A5%B0%E6%9D%A1%402x.png'></image>
+    </view>
+    <!-- 拼团模块 -->
+    <view style='margin-bottom:30rpx;'>
+      <view class='spell' wx:if='{{loadFlag == "spell"}}' wx:for='{{spellteam}}' wx:key='item'>
+        <view class='spell_one'>
+          <view class='spell_one_top'>{{item.limitSpellNum}}人团</view>
+          <view class='spell_one_buttom'>
+            {{item.userInfo.nickName == '' ? item.userInfo.username:item.userInfo.nickName}}
+          </view>
+        </view>
+        <view class='spell_two'></view>
+        <view class='spell_three'>
+          <view class='spell_three_top'>
+            还差
+            <text style='color:#F10202'>{{(item.limitSpellNum)-(item.spellNum)}}人</text>
+            拼成
+          </view>
+          <view class='spell_three_buttom'>创建时间：{{item.createTime}}</view>
+        </view>
+        <view class='spell_four'>加入拼团</view>
+      </view>
+    </view>
+    <!-- 秒杀模块 -->
+    <view class='limit' wx:if='{{loadFlag == "limit"}}'>
+      <view class='limit_top'>
+        <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/product/%E5%9B%BE%E5%B1%82%2031%402x.png'></image>
+        <view style='color:#FC9B0E'>{{countdown}}</view>
+      </view>
+      <view class='limit_buttom'>
+        <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/product/%E5%9B%BE%E5%B1%82%2032%402x.png'></image>
+        <view>
+          已抢
+          <text style='color:#F10202'>30%</text>
+        </view>
+      </view>
+    </view>
+    <!-- 产品详情图 -->
+    <view class='product_detail'>
+      <view class='product_detail_tit'>产品详情</view>
+      <view class='product_detail_img'>
+        <image src='{{loadFlag == "spell" || loadFlag == "limit" ? product.goods.descImage:product.descImage}}' mode='widthFix'></image>
+      </view>
+    </view>
+    <!-- 底部遮挡层 -->
+    <template is='space'></template>
+    <!-- 底部导航组件 -->
+    <navbar_buttom wx:if='{{loadFlag == "product"}}' id='buttom' bindeventListener='listentCart'></navbar_buttom>
+    <!-- 秒杀类底部导航组件 -->
+    <view class='location' wx:if='{{loadFlag == "limit"}}'>
+      <view class='location_num'>库存：200000</view>
+      <view class='location_statistical'>
+        邮费：
+        <text>距离计算</text>
+      </view>
+      <view class='location_button'>立即购买</view>
+    </view>
+    <!-- 拼团类底部导航组件 -->
+    <view class='location' wx:if='{{loadFlag == "spell"}}'>
+      <view class='location_num'>
+        库存：{{(product.goods.stockCount - product.goods.saleCount) > 0 ? (product.goods.stockCount - product.goods.saleCount):'已售罄'}}
+      </view>
+      <view class='location_statistical'>
+        邮费：
+        <text>{{product.goods.enablePostPrice?'距离计算':'无'}}</text>
+      </view>
+      <view class='location_button'>自己开团</view>
+    </view>
+  </view>
+  <view class='page-content' style='height:calc(100vh - {{navH}}px)' wx:if='{{tabshow == 1}}'>
+    <!-- 产品详情图 -->
+    <view class='product_detail'>
+      <view class='product_detail_tit'>产品详情</view>
+      <view class='product_detail_img'>
+        <image src='{{loadFlag == "spell" || loadFlag == "limit" ? product.goods.descImage:product.descImage}}' mode='widthFix'></image>
+      </view>
+    </view>
+    <!-- 底部遮挡层 -->
+    <template is='space'></template>
+  </view>
+  <!-- 分享 -->
+  <view class="zan-dialog {{ shareViewOpen ? 'zan-dialog--show' : '' }}">
+    <view class="zan-dialog__mask" bindtap="share" />
+    <view class="zan-dialog__container">
+      <view class='share'>
+        <view class='shareTit'>分享到</view>
+        <view class='shareView'>
+          <view>
+            <button class='btn2' open-type='share'>
+              <image class='btnImg' src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/product/wx.png'></image>
+              <view>分享给朋友</view>
+            </button>
+          </view>
+          <view style='width:20%;'></view>
+          <view>
+            <button class='btn2' bindtap="shareImage">
+              <image class='btnImg' src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/product/wxCon.png'></image>
+              <view>分享到朋友圈</view>
+            </button>
+            <view class="canvas-box">
+              <canvas canvas-id="myCanvas" style="width:100%;height:{{windowHeight}}px;"></canvas>
+            </view>
+          </view>
+        </view>
+        <view class='shareColse' bindtap="toggleDialog">取消</view>
+      </view>
+    </view>
+  </view>
+  <!-- 生成的分享框 -->
+  <view class="zan-dialog {{ showDialog  ? 'zan-dialog--show' : '' }}">
+    <view class="zan-dialog__mask" bindtap="toggleDialog" />
+    <view class="zan-dialog__container"></view>
+  </view>
+</view>

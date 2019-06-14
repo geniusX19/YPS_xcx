@@ -1,0 +1,60 @@
+/* pages/chooseStore/chooseStore.wxss */
+
+/* 顶部公用组件 */
+
+page {
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.view-page {
+  height: 100%;
+  width: 100%;
+  left: 0;
+  top: 0;
+  box-sizing: border-box;
+  position: absolute;
+  overflow: hidden;
+}
+
+.page-content {
+  box-sizing: border-box;
+  position: relative;
+  overflow-y: auto;
+}
+
+/* 门店列表展示 */
+
+.store{
+  width: 690rpx;
+  margin: 0 auto;
+  padding: 30rpx;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  border-bottom: 2rpx solid #E6E6E6;
+}
+
+.storeItem{
+
+}
+
+.storeItem_top{
+  font-size: 30rpx;
+}
+
+.storeItem_top text{
+  font-size: 20rpx;
+}
+
+.storeItem_bottom{
+  font-size: 24rpx;
+  color: #999999;
+}
+
+.select{
+  color: #41BA53
+}

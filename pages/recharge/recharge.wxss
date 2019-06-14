@@ -1,0 +1,154 @@
+/* pages/recharge/recharge.wxss */
+
+/* 顶部全局样式 */
+
+page {
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.view-page {
+  height: 100%;
+  width: 100%;
+  left: 0;
+  top: 0;
+  box-sizing: border-box;
+  position: absolute;
+  overflow: hidden;
+}
+
+.page-content {
+  box-sizing: border-box;
+  position: relative;
+  overflow-y: auto;
+}
+
+/* 顶部标题 */
+
+.top{
+  width: 750rpx;
+  padding: 30rpx 30rpx 0 30rpx;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  font-size: 30rpx;
+  color: #333333;
+}
+
+/* 充值列表 */
+
+.content_body{
+  width: 750rpx;
+  box-sizing: border-box;
+  font-size: 34rpx;
+  color: #333333;
+}
+
+.content_list{
+  float: left;
+}
+
+.content_item{
+  width: 200rpx;
+  height: 70rpx;
+  font-size: 34rpx;
+  color: #333333;
+  /* box-shadow: 0rpx 0rpx 5rpx 0rpx #E2E2E2; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 30rpx 25.5rpx 15rpx 25.5rpx;
+}
+
+.backgroud_img_select{
+  background-image: url(data:image/png;base64,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);
+  background-size: 100%;
+}
+
+.backgroud_img_noselect{
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAABGCAYAAACJ4ts2AAAD5klEQVR4Xu3Yz2obVxTH8XOvJJdZaARCIASaMe0qNIL2IbKo36NdJOkieZGkXbib5DUCXZQ8Qwtq01XpzAhkgxDMqEGyJd0p4zp/cGkFZ6nz9c54zuL3OffHxdfJnZ8syz53zn3tnDur6/pTEfnk7jf8jsARCVyJyB8i8mNd1y9PT09/+zibe/fLdDo9ieP4mff+Ybfb9VEUSbvdFufef3JEJkRB4B+Buq5lt9vJer2W1WoVQggvnHNPkyRZN3+/Of235XgVRdGDfr8v3nv8EDAnEEKQ5XIpm83mdVmWZ5PJ5PqmIHmen0dR9GgwGJhDITACdwUWi0Vzo5ynafqty7LsfqvV+mU0GrW4OTgsCIg0N8l8Pt/v9/svXJ7nz3u93pM4jrFBAIFbgaqqpCzL71xRFG+Gw+G9TqcDDgII3Apst1u5vLz8vblBrsbj8QmvVZwNBD4INK9bs9nsuilInSQJNgggcEegKAqhIBwLBP5DgIJwNBD4HwEKwvFAgIJwBhDQCXCD6NyYMiJAQYwsmpg6AQqic2PKiAAFMbJoYuoEKIjOjSkjAhTEyKKJqROgIDo3powIUBAjiyamToCC6NyYMiJAQYwsmpg6AQqic2PKiAAFMbJoYuoEKIjOjSkjAhTEyKKJqROgIDo3powIUBAjiyamToCC6NyYMiJAQYwsmpg6AQqic2PKiAAFMbJoYuoEKIjOjSkjAhTEyKKJqROgIDo3powIUBAjiyamToCC6NyYMiJAQYwsmpg6AQqic2PKiAAFMbJoYuoEKIjOjSkjAhTEyKKJqROgIDo3powIUBAjiyamToCC6NyYMiJAQYwsmpg6AQqic2PKiAAFMbJoYuoEKIjOjSkjAhTEyKKJqROgIDo3powIUBAjiyamToCC6NyYMiJAQYwsmpg6AQqic2PKiAAFMbJoYuoEKIjOjSkjAhTEyKKJqROgIDo3powIUBAjiyamToCC6NyYMiLwriBX4/H4xDlnJDYxETgsUNe1zGazv1xRFG+Gw+G9TqdzeIovEDAisN1u5eLi4leX5/nzXq/3JI5jI9GJicBhgaqqpKqq75uCTLz3P49Go5b3/vAkXyBw5AIhBJnP5/sQwpc3/3jkeX4eRdGjwWBw5NGJh8BhgcViIev1+oc0TR/fFGQ6nZ7EcfwqiqIH/X5fuEkOI/LF8Qk0N8dyuZTNZvO6LMuzyWRy/f7p6rYkz7z3D7vdro+iSNrttvC6dXwHgUQfBJrXqt1u19wYslqtQgjhhXPuaZIk6+arf73tZll233v/TQjhK+fcZyLC8xYn6pgF3orIn865n+q6fpmm6fTjsH8DTstDc0gRn5oAAAAASUVORK5CYII=);
+  background-size: 100%;
+}
+
+/* 手动输入 */
+
+.enter{
+  width: 750rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  font-size: 30rpx;
+  color: #333333;
+  margin-top: 30rpx;
+}
+
+.inputstyle{
+  width: 200rpx;
+  border-bottom: 2rpx solid #E2E2E2;
+}
+
+.inputstyle input{
+  padding-left: 17rpx;
+}
+
+.input_style{
+  font-size: 24rpx;
+  display: flex;
+  align-items: center;
+}
+
+/* 底部确认充值按钮 */
+
+.buttons{
+  width: 750rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.buttons button{
+  width: 600rpx;
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* text-align: center; */
+  background-color: #41BA53;
+  color: white;
+  border-radius: 44rpx;
+  margin-top: 60rpx;
+}
+.detailedTitle{
+  background-color: #f5f5f5;
+  text-align: center;
+  margin: 30rpx 30rpx 20rpx 30rpx;
+  letter-spacing: 4rpx;
+  font-size: 34rpx;
+  color: #666;
+  line-height: 66rpx;
+}
+.detailedList{
+  /* background-color: aqua; */
+  width: 500rpx;
+  margin: 0 auto;
+}
+.detailed{
+  color: #F74603;
+  font-size: 30rpx;
+}
+.listName{
+  /* background-color: bisque; */
+  font-size: 26rpx;
+  color: #666;
+  display: inline-block;
+  /* text-align: justify; */
+  /* text-align-last: justify; */
+}
+.listmoney{
+  /* display: inline-block; */
+  float: right;
+}

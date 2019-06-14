@@ -1,0 +1,123 @@
+/* pages/saveAddress/saveAddress.wxss */
+
+/* 页面全局组建 */
+
+page {
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  background-color: #ededee;
+}
+
+.view-page {
+  height: 100%;
+  width: 100%;
+  left: 0;
+  top: 0;
+  box-sizing: border-box;
+  position: absolute;
+  overflow: hidden;
+}
+
+.page-content {
+  box-sizing: border-box;
+  position: relative;
+  overflow-y: auto;
+}
+
+
+/* 地址编辑 */
+
+.editor{
+  width: 630rpx;
+  height: 460rpx;
+  margin: 30rpx auto;
+  background-color: white;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.editor_item{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 30rpx;
+  color: #333333;
+  border-bottom: 2rpx solid #E6E6E6;
+  width: 600rpx;
+  height: 88rpx;
+}
+
+.editor_item label{
+  padding-top: 6rpx;
+}
+
+.editor_item image{
+  width: 16rpx;
+  height: 26rpx;
+}
+
+.editor_item view{
+  width: 400rpx;
+  padding-left: 60rpx;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  word-break: break-all;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  /* color: #666666d5; */
+}
+
+.editor_item input{
+  width: 435rpx;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  word-break: break-all;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+/* .picker{
+  width: 262rpx;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  word-break: break-all;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+} */
+
+/* 保存按钮 */
+
+.add-address {
+  margin: 0 auto;
+  margin-top: 30px;
+  margin-bottom: 50rpx;
+  width: 600rpx;
+  height: 88rpx;
+  border-radius: 88rpx;
+  line-height: 88rpx;
+  text-align: center;
+  color: white;
+  display: block;
+  background-color: #41BA53;
+  font-size: 30rpx;
+}
+
+.add-img {
+  margin-right: 15rpx;
+  margin-top: 10rpx;
+  width: 15px;
+  height: 15px;
+}

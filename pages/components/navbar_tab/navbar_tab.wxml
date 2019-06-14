@@ -1,0 +1,38 @@
+<!--pages/components/navbar_tab/navbar_tab.wxml-->
+<!-- <view class='weui-navbar' id='navtab'>
+  <navigator url='/pages/index/index' open-type='navigate' class='weui-navbar__item_nav' data-num='1' catchtap='select'>
+    <image src='{{select == 1 ? "/imgs/tarImg/home_s.png":"/imgs/tarImg/home.png"}}'></image>
+    <text style='{{select == 1 ? "color:#41ba53":"color:#a9b7b7"}}'>首页</text>
+  </navigator>
+  <navigator url='/pages/sort/sort' open-type='navigate' class='weui-navbar__item_nav' data-num='1' catchtap='select'>
+    <image src='{{select == 2 ? "/imgs/tarImg/fenlei_s.png":"/imgs/tarImg/fenlei.png"}}'></image>
+    <text style='{{select == 2 ? "color:#41ba53":"color:#a9b7b7"}}'>分类</text>
+  </navigator>
+  <navigator url='/pages/cart/cart' open-type='navigate' class='weui-navbar__item_nav' data-num='1' catchtap='select'>
+    <image src='{{select == 3 ? "/imgs/tarImg/cart_s.png":"/imgs/tarImg/cart.png"}}'></image>
+    <text style='{{select == 3 ? "color:#41ba53":"color:#a9b7b7"}}'>购物车</text>
+    <view class='tip_nav'>
+      {{num}}
+    </view>
+  </navigator>
+  <navigator url='/pages/personal/personal' open-type='navigate' class='weui-navbar__item_nav' data-num='1' catchtap='select'>
+    <image src='{{select == 4 ? "/imgs/tarImg/person_s.png":"/imgs/tarImg/person.png"}}'></image>
+    <text style='{{select == 4 ? "color:#41ba53":"color:#a9b7b7"}}'>我的</text>
+  </navigator>
+</view> -->
+
+<!-- <view class="navbar" style='height:{{navH}}px'>
+  <view class='navbar-title'>
+    {{pageName}}
+  </view>
+</view> -->
+
+
+<view class="navbar" style='height:{{navH}}px'>
+  <!-- <view class="navbar-action-wrap  {{showHome ? 'navbar-action-group' : ''}} row item-center" wx:if="{{showNav}}" catchtap='navBack'>
+    <image class='navbar-img' src='/imgs/back.png'></image>
+  </view> -->
+  <view class='navbar-title'>
+    {{pageName}}
+  </view>
+</view>

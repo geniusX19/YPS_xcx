@@ -1,0 +1,109 @@
+<view class='view-page'>
+  <navbar page-name="个人中心"></navbar>
+  <view class='page-content' style='height:calc(100vh - {{navH}}px)'>
+    <!-- 背景框 -->
+    <image class='index_bg' src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/personal/%E9%A1%B6%E9%83%A82%402x.png'></image>
+
+    <!-- 头像框 -->
+    <view class='JFrame'>
+      <image src='{{userInfo.avatarUrl}}'></image>
+      <text>{{userInfo.nickName}}</text>
+    </view>
+
+    <!-- 账户信息 -->
+    <view class='account'>
+      <view class='item' catchtap='toMycoupons'>
+        <text>{{couponNum}}</text>
+        <text class='top'>优惠券</text>
+      </view>
+      <view style='width:0.1rem;height:70rpx;background-color:#999999'></view>
+      <view class='item' catchtap='torecharge'>
+        <text>{{AccountInfo.remainMoney == null ? '0' : AccountInfo.remainMoney}}</text>
+        <text class='top'>钱包余额</text>
+      </view>
+    </view>
+    <!-- 订单 -->
+    <view class='order'>
+      <view class='item_top' catchtap='toOrder' data-index='0'>
+        <view class='left'>我的订单</view>
+        <view class='right'>
+          <text>全部订单</text>
+          <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/personal/%E5%8F%B3%E7%AE%AD%E5%A4%B4icon%402x.png'></image>
+        </view>
+      </view>
+      <view style='width:632rpx;height:1rpx;background-color:#E6E6E6'></view>
+      <view class='item_buttom'>
+        <view class='item_buttom_item adjust_left' catchtap='toOrder' data-index='1'>
+          <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/personal/spell.png'></image>
+          <text>拼团中</text>
+        </view>
+        <view class='item_buttom_item' catchtap='toOrder' data-index='2'>
+          <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/personal/%E5%BE%85%E4%BB%98%E6%AC%BEicon%402x.png'></image>
+          <text>待付款</text>
+        </view>
+        <view class='item_buttom_item' catchtap='toOrder' data-index='3'>
+          <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/personal/%E5%B7%B2%E4%BB%98%E6%AC%BEicon%402x.png'></image>
+          <text>已付款</text>
+        </view>
+        <view class='item_buttom_item adjust_right' catchtap='toOrder' data-index='4'>
+          <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/personal/gouwuche.png'></image>
+          <text>待收货</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 领取优惠券标语 -->
+
+    <view class='coupons' catchtap='toCoupons'>
+      <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/personal/%E9%A2%86%E5%8F%96%E4%BC%98%E6%83%A0%E5%88%B8%402x.png'></image>
+    </view>
+
+    <!-- 列表 -->
+
+    <view class='item_list'>
+      <view class='item_list_item' catchtap='toMycoupons'>
+        <view class='left'>
+          <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/personal/%E5%9B%BE%E5%B1%82%20120%402x.png'></image>
+          <text>我的优惠券</text>
+        </view>
+        <view class='right'>
+          <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/personal/%E5%8F%B3%E7%AE%AD%E5%A4%B4icon%402x.png'></image>
+        </view>
+      </view>
+      <view style='width:632rpx;height:2rpx;background-color:#E6E6E6'></view>
+      <view class='item_list_item' catchtap='toAddresses'>
+        <view class='left'>
+          <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/personal/%E6%94%B6%E8%B4%A7%E5%9C%B0%E5%9D%80%E7%AE%A1%E7%90%86%402x.png'></image>
+          <text>收货地址管理</text>
+        </view>
+        <view class='right'>
+          <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/personal/%E5%8F%B3%E7%AE%AD%E5%A4%B4icon%402x.png'></image>
+        </view>
+      </view>
+      <view style='width:632rpx;height:2rpx;background-color:#E6E6E6'></view>
+      <view class='item_list_item' catchtap='toCollection'>
+        <view class='left'>
+          <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/personal/%E5%9B%BE%E5%B1%82%20122%402x.png'></image>
+          <text>商品收藏</text>
+        </view>
+        <view class='right'>
+          <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/personal/%E5%8F%B3%E7%AE%AD%E5%A4%B4icon%402x.png'></image>
+        </view>
+      </view>
+      <view style='width:632rpx;height:2rpx;background-color:#E6E6E6'></view>
+      <view class='item_list_item' catchtap='toSearchQuery'>
+        <view class='left'>
+          <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/personal/%E5%9B%BE%E5%B1%82%20152%402x.png'></image>
+          <text>追溯查询</text>
+        </view>
+        <view class='right'>
+          <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/personal/%E5%8F%B3%E7%AE%AD%E5%A4%B4icon%402x.png'></image>
+        </view>
+      </view>
+      <view style='width:632rpx;height:2rpx;background-color:#E6E6E6'></view>
+    </view>
+    <!-- <view>
+      <text bindtap='testPay'>支付</text>
+    </view> -->
+  </view>
+</view>

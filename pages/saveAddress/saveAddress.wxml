@@ -1,0 +1,45 @@
+<!--pages/saveAddress/saveAddress.wxml-->
+<view class='view-page'>
+  <navbar page-name1="{{updateFlag?'编辑地址':'新增地址'}}"></navbar>
+  <view class='page-content' style='height:calc(100vh - {{navH}}px)'>
+    <!-- 地址编辑栏 -->
+    <view class='editor'>
+      <view class='editor_item'>
+        <label>收货人</label>
+        <input bindinput="getUserName" value='{{updateFlag?UserName:""}}' placeholder='请填写您的姓名(必填项)'></input>
+      </view>
+      <view class='editor_item'>
+        <label>手机号</label>
+        <input type='number' value='{{updateFlag?phoneNumber:""}}' bindinput='getPhoneNumber' bindblur="judgePhoneNumber" placeholder='请填写您的手机号(必填项)' maxlength='11'></input>
+      </view>
+      <!-- <view class='editor_item'>
+        <label>收货时间</label>
+        <picker bindchange="bindPickerChange" value="{{indexArr}}" range="{{array}}">
+          <view class="picker">{{array[indexArr]}}</view>
+        </picker>
+        <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/personal/%E5%8F%B3%E7%AE%AD%E5%A4%B4icon%402x.png'></image>
+      </view> -->
+      <view class='editor_item'>
+        <label>所在地</label>
+        <picker mode="region" bindchange="bindRegionChange" value="{{region}}" custom-item="{{customItem}}">
+          <view class="picker">
+            <!-- {{updateFlag?province+" ,"city+" ,"+town:region[0]+" ,"+region[1]+" ,"+region[2]}} -->
+            {{updateFlag?province:region[0]}} ,{{updateFlag?city:region[1]}} ,{{updateFlag?town:region[2]}}
+          </view>
+        </picker>
+        <image style='width:21rpx;height:26rpx' src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/address/%E5%9B%BE%E5%B1%82%201%402x.png'></image>
+      </view>
+      <view class='editor_item'>
+        <label>详细地址</label>
+        <input bindinput="getAddressNum" value='{{updateFlag?addressNum:""}}' placeholder='请填写您的具体位置(必填项)'></input>
+      </view>
+    </view>
+
+
+    <!-- 保存按钮 -->
+    <view class="add-address" bindtap="addAddress">
+      <image class="add-img" src="https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/address/%2B%402x.png"></image>{{updateFlag?'保存地址':'新增地址'}}
+    </view>
+
+  </view>
+</view>

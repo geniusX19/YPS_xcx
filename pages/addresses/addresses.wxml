@@ -1,0 +1,44 @@
+<!--pages/addresses/addresses.wxml-->
+
+<view class='view-page'>
+  <navbar page-name1="地址管理"></navbar>
+  <view class='page-content' style='height:calc(100vh - {{navH}}px)'>
+    <!-- 地址框 -->
+    <view wx:if="{{isHide}}">
+      <view class='tips'>暂无保存的地址，请新增！</view>
+      <view class="add-address" bindtap="addAddress">
+        <image class="add-img" src="https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/address/%2B%402x.png"></image>新增地址
+      </view>
+    </view>
+    <scroll-view wx:else scroll-y="true">
+      <view wx:for="{{addressList}}" wx:key="{{item}}" wx:for-index="index1" class='address'>
+        <view class='address_top'>
+          <view class='address_top_left'>
+            <view class='address_top_left_name'>{{item.name}}</view>
+            <view>{{item.telephone}}</view>
+          </view>
+          <view class='address_top_right' catchtap='toUser' data-id='{{item.id}}'>
+            <image src='{{item.default?"https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/cart/%E7%9F%A2%E9%87%8F%E6%99%BA%E8%83%BD%E5%AF%B9%E8%B1%A1%20%E6%8B%B7%E8%B4%9D%402x.png":"https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/cart/%E6%A4%AD%E5%9C%86%206%402x.png"}}'></image>
+            <view>默认地址</view>
+          </view>
+        </view>
+        <view class='address_content'>
+          {{item.province}}{{item.city}}{{item.town}}
+        </view>
+        <view class='address_buttom'>
+          <view class='address_buttom_left'>
+            {{item.detailAddress}}
+          </view>
+          <view class='address_buttom_right'>
+            <view catchtap='updateAddres' data-id='{{item.id}}'>编辑</view>
+            <view catchtap='delAddress' data-id='{{item.id}}'>删除</view>
+          </view>
+        </view>
+      </view>
+      <!-- 新增地址 -->
+      <view class="add-address" bindtap="addAddress">
+        <image class="add-img" src="https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/address/%2B%402x.png"></image>新增地址
+      </view>
+    </scroll-view>
+  </view>
+</view>

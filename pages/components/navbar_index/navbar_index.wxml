@@ -1,0 +1,7 @@
+<!--pages/components/navbar_index/navbar_index.wxml-->
+<!-- <text>pages/components/navbar_index/navbar_index.wxml</text> -->
+<view class="navbar" style='height:{{navH}}px'>
+  <view class='navbar-title'>
+    {{pageName}}
+  </view>
+</view>

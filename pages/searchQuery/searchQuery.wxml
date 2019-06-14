@@ -1,0 +1,26 @@
+<!-- pages/searchQuery/searchQuery.wxml -->
+<!-- <view class='view-page'>
+  <navbar page-name1="追溯查询"></navbar>
+  <view class='page-content' style='height:calc(100vh - {{navH}}px)'> -->
+    <!-- 顶部标签页 -->
+    <!-- <view class='current'>
+>>>>>>> 42b40e0d3157eedfa2e68a4c51e71830ca933075
+      <view wx:for='{{currentArry}}' wx:key='item' style='width:100%' catchtap='navtap' data-num='{{index}}'>
+        <view class='item'>
+          <text class='{{currentTab == index ? "buttom_linear":""}}'>{{item.text}}</text>
+        </view>
+      </view>
+    </view> -->
+    <!-- 输入框 -->
+    <!-- <view class='inputBody' wx:if='{{currentTab == 0}}'>
+      <input placeholder='请输入追溯码' placeholder-class='inputStyle' bindinput="getCode"></input>
+      <view class='add-address' catchtap='query'>查询</view>
+    </view> -->
+    <!-- 扫一扫 -->
+    <!-- <view class='inputBody' wx:if='{{currentTab == 1}}'>
+      <view style='font-size:30rpx;color:#959595'>调起微信扫一扫，识别您的条形码！</view>
+      <view class='add-address' catchtap='scan'>扫一扫</view>
+    </view> -->
+  <!-- </view>
+</view> -->
+<web-view src="https://peter.xiaomiqiu.com/api/trace/back"></web-view>

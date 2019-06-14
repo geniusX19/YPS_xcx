@@ -1,0 +1,70 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/logs/logs",
+    "pages/sort/sort",
+    "pages/entering/entering",
+    "pages/cart/cart",
+    "pages/personal/personal",
+    "pages/template/login/login",
+    "pages/product/product",
+    "pages/template/space/space",
+    "pages/order/order",
+    "pages/coupons/coupons",
+    "pages/mycoupons/mycoupons",
+    "pages/collection/collection",
+    "pages/addresses/addresses",
+    "pages/searchQuery/searchQuery",
+    "pages/saveAddress/saveAddress",
+    "pages/ordering/ordering",
+    "pages/recharge/recharge",
+    "pages/goods/goods",
+    "pages/pointsfor/pointsfor",
+    "pages/chooseStore/chooseStore"
+  ],
+  "tabBar": {
+    "color": "#a9b7b7",
+    "selectedColor": "#41ba53",
+    "borderStyle": "black",
+    "backgroundColor": "#ffff",
+    "list": [
+      {
+        "selectedIconPath": "imgs/tarImg/home_s.png",
+        "iconPath": "imgs/tarImg/home.png",
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "selectedIconPath": "imgs/tarImg/fenlei_s.png",
+        "iconPath": "imgs/tarImg/fenlei.png",
+        "pagePath": "pages/sort/sort",
+        "text": "分类"
+      },
+      {
+        "selectedIconPath": "imgs/tarImg/cart_s.png",
+        "iconPath": "imgs/tarImg/cart.png",
+        "pagePath": "pages/cart/cart",
+        "text": "购物车"
+      },
+      {
+        "selectedIconPath": "imgs/tarImg/person_s.png",
+        "iconPath": "imgs/tarImg/person.png",
+        "pagePath": "pages/personal/personal",
+        "text": "我的"
+      }
+    ]
+  },
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "WeChat",
+    "navigationBarTextStyle": "black",
+    "navigationStyle": "custom"
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "您的位置将用于计算购买商品的邮费"
+    }
+  },
+  "sitemapLocation": "sitemap.json"
+}
