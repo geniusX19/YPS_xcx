@@ -199,8 +199,9 @@ Page({
    */
   performExchange:function(e){
     var _this =this;
+    console.log(1111)
     Api.addressList().then(res => {
-      //console.log(res)
+      console.log(res)
       if(res.code === 2000){
         if(res.data.length < 1) {
           wx.showModal({
@@ -245,6 +246,7 @@ Page({
   //确认获取地址按钮
   confirmAddressClick(){
     let _this = this;
+    console.log(_this.data.cashCouponsId, _this.data.addressArr[_this.data.addressIndex].id)
     wx.showModal({
       //title: '',
       content: '是否立即兑换？',

@@ -12,6 +12,7 @@ Page({
     userInfo: {},// 用户信息
     AccountInfo:{},//賬戶信息
     couponNum:0,//优惠券数量
+    isVip: false, //是否是会员
   },
 
   /**
@@ -46,6 +47,7 @@ Page({
 
     _this.queryAccountInfo();
     _this.queryCouponNum();
+    _this.isGetVip();
   },
 
   /**
@@ -253,5 +255,18 @@ Page({
         couponNum:res.data
       })
     })
+  },
+
+  isGetVip: function(){
+    let _this = this;
+    Api.isVip().then(res => {
+      console.log(res)
+      if(res.code == 2000){
+        _this.setData({
+          isVip: res.data,
+        })
+      }
+    })
   }
+  
 })

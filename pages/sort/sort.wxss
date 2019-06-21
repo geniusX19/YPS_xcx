@@ -64,6 +64,7 @@
 
 .sortList{
   width: 220rpx;
+  background-color:#F8F8F8;
 }
 
 .sortList_item{
@@ -83,13 +84,14 @@
 }
 
 .productList{
-  width: 530rpx;
+  /* width: 530rpx; */
+  flex: 1;
   display: flex;
   flex-direction: row;
 }
 
 .productList_item{
-  width: 100%;
+  /* width: 100%; */
   margin: 16rpx 30rpx 30rpx 30rpx;
   display: flex;
   flex-direction: row;
@@ -105,7 +107,7 @@
 }
 
 .product_info{
-  width: 100%;
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -113,7 +115,7 @@
 }
 
 .product_info_tit{
-  width: 252rpx;
+  width: 100%;
   display: inline-block;
   font-size: 28rpx;
   overflow: hidden;
@@ -126,7 +128,7 @@
 
 .product_info_price{
   margin-top: 56rpx;
-  width: 80%;
+  width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -143,7 +145,7 @@
 }
 
 .product_info_price_item_left{
-  width: 100%;
+  flex: 1;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -169,7 +171,7 @@
 .product_info_price_item_right image{
   width: 44rpx;
   height: 44rpx;
-  padding-right: 20rpx;
+  margin-right: 20rpx;
 }
 
 /* 输入框查询列表 */
@@ -183,6 +185,7 @@
 .productList_items{
   width: 100%;
   padding: 35rpx 30rpx;
+  box-sizing: border-box;
   display: flex;
   flex-direction: row;
   border-bottom: 2rpx solid #E6E6E6;
@@ -198,14 +201,14 @@
 }
 
 .product_infos{
-  width: 100%;
+  /* width: 100%; */
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
 }
 
 .product_infos_tit{
-  width: 426rpx;
   display: inline-block;
   font-size: 28rpx;
   overflow: hidden;
@@ -218,7 +221,6 @@
 
 .product_infos_price{
   margin-top: 80rpx;
-  width: 490rpx;
   height: 60rpx;
   display: flex;
   justify-content: space-between;
@@ -236,7 +238,7 @@
 }
 
 .product_infos_price_item_left{
-  width: 100%;
+  flex: 1;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -257,7 +259,6 @@
 .product_infos_price_item_right image{
   width: 44rpx;
   height: 44rpx;
-  padding-right: 20rpx;
 }
 
 .clearBtn{

@@ -37,6 +37,7 @@
 .navbar-action-wrap{
   position: absolute;
   left: 15px;
+  padding: 0 20rpx 0 10rpx;
   bottom: 7px;
   z-index: 100;
   line-height: 1;

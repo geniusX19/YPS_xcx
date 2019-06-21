@@ -23,11 +23,12 @@
             <text>姓名</text>
             <text style='margin-left:20rpx;'>{{userInfo.name}}</text>
           </view>
-          <view class='distribution_bottom'>{{userInfo.detailAddress}}</view>
+          <view class='distribution_bottom' wx:if="{{isGetAddress}}">{{userInfo.detailAddress}}</view>
+          <navigator class='distribution_bottom' url='/pages/addresses/addresses' wx:if="{{!isGetAddress}}">请去填写默认地址</navigator>
         </view>
-        <view class='store_icon'>
+        <navigator class='store_icon' url='/pages/addresses/addresses'>
           <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/ordering/%E5%AE%9A%E4%BD%8D%E5%9C%B0%E5%9B%BE%402x.png'></image>
-        </view>
+        </navigator>
       </view>
       <!-- 到店自取 -->
       <view class='store' wx:if='{{select == 1}}'>
@@ -43,9 +44,9 @@
               </view>
             </view>
           </view>
-          <view class='store_icon'>
+          <!-- <view class='store_icon'>
             <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/ordering/%E5%AE%9A%E4%BD%8D%E5%9C%B0%E5%9B%BE%402x.png'></image>
-          </view>
+          </view> -->
         </view>
       </view>
     </view>
@@ -103,7 +104,7 @@
             <view class='picker'>无优惠卷</view>
             <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/personal/%E5%8F%B3%E7%AE%AD%E5%A4%B4icon%402x.png'></image>
           </view>
-          <navigator class='listview_item' url='/pages/mycoupons/mycoupons?limt=ordering' wx:else>
+          <navigator class='listview_item' url='/pages/mycoupons/mycoupons?channel=GOODS&totalPrice={{infoOrder.priceModel.totalMomey-infoOrder.priceModel.memberDiscountMoney}}&goodsIds={{goodsIdArr}}' wx:else>
             <view class='font'>优惠券</view>
             <view class='picker'>{{infoOrder.canUseCouponCount}}</view>
             <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/personal/%E5%8F%B3%E7%AE%AD%E5%A4%B4icon%402x.png'></image>
@@ -147,7 +148,7 @@
     <view class='location'>
       <view class='location_num'>共{{totalNum}}件商品</view>
       <view class='location_statistical'>合计：
-        <text>¥{{infoOrder.priceModel.finalMoney}}</text>
+        <text class='text'>¥{{infoOrder.priceModel.finalMoney}}</text>
       </view>
       <view catchtap='paymentClick' class='location_button'>提交订单</view>
     </view>

@@ -45,7 +45,8 @@ page {
 /* 商品信息 */
 
 .product_info {
-  width: 92%;
+  width: 100%;
+  box-sizing: border-box;
   display: flex;
   background-color: white;
   flex-direction: column;
@@ -59,6 +60,15 @@ page {
   font-size: 30rpx;
   font-weight: bold;
   margin-bottom: 5rpx;
+}
+
+.product_con{
+  margin-top: 16rpx;
+  font-size: 28rpx;
+  color: #ccc;
+  max-height: 68rpx;
+  line-height: 34rpx;
+  overflow: hidden;
 }
 
 .product_price {
@@ -125,8 +135,9 @@ page {
 /* 产品详情 */
 
 .product_detail {
-  display: flex;
-  flex-direction: column;
+  width: 100%;
+  /* display: flex;
+  flex-direction: column; */
   background-color: white;
 }
 
@@ -278,10 +289,10 @@ page {
 }
 
 .spell_one{
+  width: 120rpx;
   height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
   font-size: 24rpx;
 }
@@ -300,9 +311,13 @@ page {
 
 .spell_one_buttom{
   /* color: #F10202; */
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   display: flex;
+  line-height: 32rpx;
   align-items: center;
-  justify-content: center;
 }
 
 .spell_two{

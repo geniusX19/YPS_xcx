@@ -6,7 +6,11 @@
 
     <!-- 头像框 -->
     <view class='JFrame'>
-      <image src='{{userInfo.avatarUrl}}'></image>
+      <view class='JFrame-image'>
+        <image src='{{userInfo.avatarUrl}}'></image>
+        <icon class='{{ isVip ? "vip" : ""}}'></icon>
+      </view>
+      
       <text>{{userInfo.nickName}}</text>
     </view>
 
@@ -33,22 +37,22 @@
       </view>
       <view style='width:632rpx;height:1rpx;background-color:#E6E6E6'></view>
       <view class='item_buttom'>
-        <view class='item_buttom_item adjust_left' catchtap='toOrder' data-index='1'>
-          <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/personal/spell.png'></image>
-          <text>拼团中</text>
-        </view>
-        <view class='item_buttom_item' catchtap='toOrder' data-index='2'>
+        <view class='item_buttom_item adjust_left' catchtap='toOrder' data-index='2'>
           <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/personal/%E5%BE%85%E4%BB%98%E6%AC%BEicon%402x.png'></image>
           <text>待付款</text>
         </view>
         <view class='item_buttom_item' catchtap='toOrder' data-index='3'>
           <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/personal/%E5%B7%B2%E4%BB%98%E6%AC%BEicon%402x.png'></image>
-          <text>已付款</text>
+          <text>待处理</text>
         </view>
-        <view class='item_buttom_item adjust_right' catchtap='toOrder' data-index='4'>
+        <view class='item_buttom_item' catchtap='toOrder' data-index='4'>
           <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/personal/gouwuche.png'></image>
           <text>待收货</text>
         </view>
+         <navigator url='/pages/order/orderRefund' class='item_buttom_item adjust_right' data-index='1'>
+          <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/personal/spell.png'></image>
+          <text>退款/售后</text>
+        </navigator>
       </view>
     </view>
 

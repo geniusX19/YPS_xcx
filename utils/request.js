@@ -4,6 +4,21 @@ const app = getApp();
 const baseUrl = "https://peter.xiaomiqiu.com/api"; // 小米球测试服
 const request = function (createData) {
   return new Promise(function (resolve, reject) {
+
+    wx.checkSession({
+      success: function (res) {
+        //console.log("未过期");
+      },
+      fail: function (res) {
+        console.log("需要登录", createData.url);
+        wx.navigateTo({
+          url: '/pages/logs/logs',
+        });
+        return;
+      }
+    })
+
+    //console.log('走接口数据了',createData);
     let isJsonrequest = false;
     let isPathParams = false;
     //判断json请求
@@ -45,14 +60,18 @@ const request = function (createData) {
           if (res.data.code === 2403) { //授权失败
             title = '授权失败';
             // TODO 进行授权操作
+            wx.navigateTo({
+              url: '/pages/logs/logs',
+            })
           } else {
             title = res.data.msg;
+            console.log(res)
             console.log(res.data)
           }
           wx.showToast({
             title: title,
             icon: 'none',
-            duration: 10000,
+            duration: 1000,
             mask: false,
             success: function (res) {},
             fail: function (res) {},

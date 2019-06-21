@@ -10,6 +10,7 @@
     "pages/product/product",
     "pages/template/space/space",
     "pages/order/order",
+    "pages/order/orderRefund",
     "pages/coupons/coupons",
     "pages/mycoupons/mycoupons",
     "pages/collection/collection",

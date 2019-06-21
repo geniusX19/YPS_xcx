@@ -23,25 +23,29 @@ Page({
       text: "已过期优惠券"
     }], // 标签内容
     currentTab: 0, // 标签对应块标识
-    CouponList:[],
-    totalPage: null,// 页面数据总页数
+    CouponList: [],
+    totalPage: null, // 页面数据总页数
     id: '',
     couponId: '',
-    limt: '', //详情页进入的优惠卷
+    channel: '', //详情页进入的优惠卷
+    goodsIds: [], //商品id 购物车进来的是数组
+    totalPrice: '', //商品的总价格
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function(options) {
+  onLoad: function (options) {
     let _this = this;
     _this.setData({
       navH: app.globalData.navHeight,
       navHs: app.globalData.navHeight + 60,
     });
-    if(options.limt != undefined){
+    if (options.channel != undefined) {
       _this.setData({
-        limt: options.limt
+        channel: options.channel,
+        totalPrice: options.totalPrice,
+        goodsIds: options.goodsIds.split('-'),
       })
     }
   },
@@ -49,53 +53,68 @@ Page({
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function() {
+  onReady: function () {
 
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function() {
+  onShow: function () {
     var _this = this;
+    if (_this.data.currentTab == 0) {
+      if (this.data.channel != '') {
+        _this.getPaymentCouponData();
+        return;
+      }
+    }
+    // 初始化页码值（防止下拉 page+1 后，返回再进入页面 page ！=1 的情况）
+    page = 1;
     _this.showList();
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function() {
+  onHide: function () {
 
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function() {
+  onUnload: function () {
     var that = this
-   
+
   },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function() {
+  onPullDownRefresh: function () {
 
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function() {
+  onReachBottom: function () {
     var _this = this;
-    if(page >= 1 && page <= _this.data.totalPage){
+    if (page >= 1 && page < _this.data.totalPage) {
       page++;
 
       wx.showLoading({
         title: '加载中...',
       })
-      
+
       setTimeout(function () {
+        //_this.showList();
+        if (_this.data.currentTab == 0) {
+          if (_this.data.channel != '') {
+            _this.getPaymentCouponData();
+            return;
+          }
+        }
         _this.showList();
         wx.hideLoading()
       }, 1500)
@@ -105,30 +124,38 @@ Page({
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function() {
+  onShareAppMessage: function () {
 
   },
 
   /**
    * 点击切换标签
    */
-  navtap: function(e) {
+  navtap: function (e) {
     var _this = this;
     // 切换模块刷新页码
     page = 1;
     _this.setData({
       currentTab: e.currentTarget.dataset.num,
-      CouponList: []
+      CouponList: [],
     })
     console.log(e.currentTarget.dataset.num);
 
     wx.showLoading({
       title: '加载中...',
     })
-    
+
     setTimeout(function () {
+      //_this.showList();
+      if (_this.data.currentTab == 0) {
+        if (_this.data.channel != '') {
+          _this.getPaymentCouponData();
+          wx.hideLoading();
+          return;
+        }
+      }
       _this.showList();
-      wx.hideLoading()
+      wx.hideLoading();
     }, 1500)
 
 
@@ -141,7 +168,7 @@ Page({
   /*
    * 展示优惠券列表
    */
-  showList: function() {
+  showList: function () {
     var _this = this;
     var _data = {
       "id": "",
@@ -170,9 +197,9 @@ Page({
       // console.log(res.data.dataList)
       console.log("======后台返的数据END=======")
 
-      
+
       //转换时间戳
-      for(let ii =0;ii<res.data.dataList.length;ii++){
+      for (let ii = 0; ii < res.data.dataList.length; ii++) {
         res.data.dataList[ii].drawDate = util.formatDate(res.data.dataList[ii].drawDate)
         res.data.dataList[ii].startDate = util.formatDate(res.data.dataList[ii].startDate)
         res.data.dataList[ii].endTime = util.formatDate(res.data.dataList[ii].endTime)
@@ -180,7 +207,7 @@ Page({
         // console.log(res.data.dataList[ii]);
       }
 
-      this.setData({
+      _this.setData({
         CouponList: _this.data.CouponList.concat(res.data.dataList),
         totalPage: res.data.totalPages,
       })
@@ -190,7 +217,7 @@ Page({
   /**
    * 使用优惠券
    */
-  useCoupons:function(e){
+  useCoupons: function (e) {
     console.log("====================")
     console.log("使用优惠券")
     console.log(e);
@@ -198,16 +225,24 @@ Page({
     var _thisGoodLimit = e.currentTarget.dataset.goodsLimit;
     //var _thisgoodsId = e.currentTarget.dataset.goodsId;
     var id = e.currentTarget.dataset.id;
+    _this.setData({
+      id: id,
+    })
 
-   _this.setData({
-     id: id,
-   })
-   
-    if (_this.data.limt == 'ordering') {
-      console.log(_this.data.limt)
+    if (_this.data.channel == 'GOODS') {
       var pages = getCurrentPages();
-      var currPage = pages[pages.length - 1];   //当前页面
-      var prevPage = pages[pages.length - 2];  //上一个页面
+      var currPage = pages[pages.length - 1]; //当前页面
+      var prevPage = pages[pages.length - 2]; //上一个页面
+
+      prevPage.setData({
+        couponId: id
+      });
+      wx.navigateBack({});
+      return;
+    } else if (_this.data.channel == 'SPELL_GROUP') {
+      var pages = getCurrentPages();
+      var currPage = pages[pages.length - 1]; //当前页面
+      var prevPage = pages[pages.length - 2]; //上一个页面
 
       prevPage.setData({
         couponId: id
@@ -216,17 +251,44 @@ Page({
       return;
     }
 
-    if(_thisGoodLimit == "ALL"){
+    if (_thisGoodLimit == "ALL") {
       console.log("走的：ALL")
       wx.switchTab({
         url: '/pages/sort/sort',
       });
-    }else if(_thisGoodLimit == "SINGLETON"){
+    } else if (_thisGoodLimit == "SINGLETON") {
       console.log("走的：SINGLETON")
       console.log(id);
       wx.navigateTo({
         url: '/pages/product/product?id=' + id,
       });
     }
+  },
+
+  //获取详情页购物车拼团秒杀的优惠券信息
+  getPaymentCouponData() {
+    let _this = this;
+    let data = {
+      channel: _this.data.channel,
+      totalPrice: _this.data.totalPrice,
+      goodsIds: _this.data.goodsIds,
+    }
+    console.log(data)
+    Api.getPaymentCoupon(data, page, size).then(res => {
+      console.log(res)
+      if (res.code == 2000) {
+        for (let i = 0; i < res.data.dataList.length; i++) {
+          res.data.dataList[i].drawDate = util.formatDate(res.data.dataList[i].drawDate)
+          res.data.dataList[i].startDate = util.formatDate(res.data.dataList[i].startDate)
+          res.data.dataList[i].endTime = util.formatDate(res.data.dataList[i].endTime)
+        }
+        _this.setData({
+          CouponList: _this.data.CouponList.concat(res.data.dataList),
+          totalPage: res.data.totalPages,
+        })
+      }
+    })
   }
+
+
 })

@@ -7,9 +7,7 @@
   <navigator url='/pages/cart/cart' open-type='switchTab' class='weui-navbar__item'>
     <image src='/imgs/tarImg/cart.png'></image>
     <text>购物车</text>
-    <view class='tip'>
-      {{num}}
-    </view>
+    <view class='tip'>{{num}}</view>
   </navigator>
   <view class='weui-navbar__item' catchtap='collectiion'>
     <image src='{{collection?"https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/product/collection.png":"https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/product/%E5%9B%BE%E5%B1%82%20159%402x.png"}}'></image>

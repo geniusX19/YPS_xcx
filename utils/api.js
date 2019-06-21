@@ -49,7 +49,8 @@ module.exports = {
       url: '/common/category/search',
       method: 'POST',
       data: {
-        title: ''
+        title: '',
+        isDel: false
       }
     })
   },
@@ -80,7 +81,8 @@ module.exports = {
       url: '/common/category/search',
       method: 'POST',
       data: {
-        title: ''
+        title: '',
+        isDel: false
       }
     })
   },
@@ -219,6 +221,15 @@ module.exports = {
     })
   },
 
+  //分页查询当前支付可用优惠券
+  getPaymentCoupon:(data,page,size) => {
+    return request({
+      url: `/member/coupon/dra/can/use/${page}/${size}`,
+      method: 'POST',
+      data: data,
+    })
+  },
+
   /**
    * 积分换购
    */
@@ -241,9 +252,9 @@ module.exports = {
   },
 
   // 执行兑换操作
-  performExchange:(id) => {
+  performExchange: (id, addressId) => {
     return request({
-      url: `/member/swap/record/add/${id}`,
+      url: `/member/swap/record/add/${id}?addressId=${addressId}`,
       method: 'POST'
     })
   },
@@ -436,6 +447,13 @@ module.exports = {
       data: data,
     })
   },
+  //查看退款订单
+  seeRefund: (page,size) =>{
+    return request({
+      url: `/member/order/app/search/${page}/${size}`,
+      method: 'GET',
+    })
+  },
 
   //待收货接口
   receivingGoods: (orderId) => {
@@ -451,11 +469,42 @@ module.exports = {
       method: 'POST',
     })
   },
+  /**
+   * 
+   * 拼团管理
+   */
+
   //拼团支付接口
   paymentAssemble: (orderId) => {
     return request({
       url: `/member/spell/task/confirm/remain/${orderId}`,
       method: 'POST',
+    })
+  },
+  //
+  //拼团支付查询商品接口
+  assemblePaymentGoods: (data) => {
+    return request({
+      url: `/member/cart/search/by/ids`,
+      method: 'POST',
+      data: data,
+    })
+  },
+  //拼团支付预览接口
+  assemblePaymentPreview: (data) => {
+    return request({
+      url: `/member/spell/task/pre`,
+      method: 'POST',
+      data: data,
+    })
+  },
+
+  //创建拼团订单
+  createPreviewOrder: (data) => {
+    return request({
+      url: `/member/spell/task/create`,
+      method: 'POST',
+      data: data,
     })
   },
 
@@ -465,5 +514,15 @@ module.exports = {
       url: '/member/finance/pre/recharge?amount='+fee,
       method: 'POST',
     })
-  }
+  },
+
+
+  //是否是会员
+  isVip: () => {
+    return request({
+      url: '/member/wx/account/info',
+      method: 'GET',
+    })
+  },
+
 }

@@ -14,7 +14,7 @@
 
 <view class='view-page'>
   <navbar page-name="皖垦农产品"></navbar>
-  <view class='page-content' style='height:calc(100vh - {{navH}}px)'>
+  <scroll-view scroll-y	bindscrolltolower='onReachBottom' class='page-content' style='height:calc(100vh - {{navH}}px)'>
     <!-- 背景框 -->
     <image class='index_bg' src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/index/index.png'></image>
     <!--顶部搜索框-->
@@ -41,12 +41,16 @@
     </view>
 
     <!-- 首页分类列表 -->
-    <view class='category'>
-      <view class='category_item' wx:for="{{categoryList}}" wx:key="{{item}}" catchtap='toSort' data-index='{{index}}'>
-        <image src='{{item.smallImage}}'></image>
-        <view>{{item.title}}</view>
+      <view class='category'>
+        <scroll-view class='category-scroll' scroll-x style="width: 100%;hieght:130rpx;">
+          <view class='category_item' wx:for="{{categoryList}}" wx:key="{{item}}" catchtap='toSort' data-index='{{index}}'>
+            <image src='{{item.smallImage}}'></image>
+            <view>{{item.title}}</view>
+          </view>
+        </scroll-view>
       </view>
-    </view>
+    
+    
 
     <!-- 活动专区 -->
     <view class='activity'>
@@ -146,23 +150,7 @@
 
     <!-- 底部tab栏 -->
     <navbar_buttom id='navtab'></navbar_buttom>
-
-    <!-- 登录授权 -->
-    <view class="login_mask" wx:if="{{!loginShow}}">
-      <view class="login_main" wx:if="{{canIUse}}">
-        <image class="logo" src='/imgs/logo.png'></image>
-        <view class="title">良品生活，源自农垦</view>
-        <view style="position:relative;margin-top:30rpx;margin-bottom:60rpx;">
-          <label>
-            <view>申请获取以下权限</view>
-            <text style='color:#666666;font-size:25rpx;'>获得你的公开信息(昵称，头像等)</text>
-          </label>
-        </view>
-        <button class="submit" open-type="getUserInfo" bindgetuserinfo="getUserInfo">授权</button>
-      </view>
-      <view wx:else>请升级微信版本</view>
-    </view>
-  </view>
+  </scroll-view>
 </view>
 <!-- 顶部背景 -->
 <!-- <image class='index_bg' src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/index/%E5%9B%BE%E5%B1%82%201422%402x.png'></image> -->

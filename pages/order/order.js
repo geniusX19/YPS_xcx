@@ -241,6 +241,14 @@ Page({
   //确定申请按钮
   confirmPopupClick(){
     let _this = this;
+    if (_this.data.popupText == ''){
+      wx.showToast({
+        title: '内容不能为空',
+        icon: 'none',
+        duration: 2000,
+      })
+      return;
+    }
     let data = {
       orderId: _this.data.orderId,
       refundReason: _this.data.popupText

@@ -1,6 +1,16 @@
 <!--logs.wxml-->
-<view class="container log-list">
-  <block wx:for="{{logs}}" wx:for-item="log">
-    <text class="log-item">{{index + 1}}. {{log}}</text>
-  </block>
-</view>
+<!-- 登录授权 -->
+    <view class="login_mask" wx:if="{{!loginShow}}">
+      <view class="login_main" wx:if="{{canIUse}}">
+        <image class="logo" src='/imgs/logo.png'></image>
+        <view class="title">良品生活，源自农垦</view>
+        <view style="position:relative;margin-top:30rpx;margin-bottom:60rpx;">
+          <label>
+            <view>申请获取以下权限</view>
+            <text style='color:#666666;font-size:25rpx;'>获得你的公开信息(昵称，头像等)</text>
+          </label>
+        </view>
+        <button class="submit" open-type="getUserInfo" bindgetuserinfo="getUserInfo">授权</button>
+      </view>
+      <view wx:else>请升级微信版本</view>
+    </view>

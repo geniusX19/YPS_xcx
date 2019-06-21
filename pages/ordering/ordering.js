@@ -12,7 +12,7 @@ Page({
    */
   data: {
     navH: null, // 用户手机导航高度
-    select: 1,// 顶部订单类型切换
+    select: 0,// 顶部订单类型切换
     array: ['微信支付', '余额'],
     index: 0, //支付方式 0 余额支付 1微信支付
     arrays: ['到店自提', '快递', '壹配送'],
@@ -31,8 +31,8 @@ Page({
     userInfo: {}, //用户信息
     addressDetailList: [], //获取全部的门店地址
     shopAddressId: '', //门店的id
-    
-    // 门店信息
+    isGetAddress: false,
+    goodsIdArr: '', //传给优惠券的商品id数据
     productInfoList:[],
     
   },
@@ -43,26 +43,30 @@ Page({
       console.log(res)
       if(res.code == 2000){
         if (res.data == undefined){
-            wx.showModal({
-              title: '',
-              content: '没有填写默认地址，请去填写默认地址',
-              success(res) {
-                if (res.confirm) {
-                  //console.log('用户点击确定')
-                  wx.navigateTo({
-                    url: '/pages/addresses/addresses',
-                  })
-                } else if (res.cancel) {
-                  //console.log('用户点击取消')
-                  wx.navigateBack({
+          _this.setData({
+            isGetAddress: false,
+          })
+            // wx.showModal({
+            //   title: '',
+            //   content: '没有填写默认地址，请去填写默认地址',
+            //   success(res) {
+            //     if (res.confirm) {
+            //       //console.log('用户点击确定')
+            //       wx.navigateTo({
+            //         url: '/pages/addresses/addresses',
+            //       })
+            //     } else if (res.cancel) {
+            //       //console.log('用户点击取消')
+            //       wx.navigateBack({
                     
-                  })
-                }
-              } 
-            })
+            //       })
+            //     }
+            //   } 
+            // })
         }else{
           _this.setData({
-            userInfo: res.data
+            userInfo: res.data,
+            isGetAddress: true,
           })
         }
       }
@@ -79,14 +83,19 @@ Page({
     }
     Api.generateOrder(data).then(res => {
       if(res.code == 2000 ){
-        let arr = res.data
+        let arr = res.data;
+        let goodsArr = []
+        console.log("商品预览====",arr)
         let totalNum = 0;
         for(let i  = 0; i < arr.length; i++){
-          totalNum += arr[i].num
+          totalNum += arr[i].num;
+          goodsArr.push(arr[i].goodsId)
         }
+        console.log(goodsArr)
         _this.setData({
           productInfoList: arr,
           totalNum: totalNum,
+          goodsIdArr: goodsArr.join('-'),
         })
         
       }
@@ -104,6 +113,7 @@ Page({
       "goodsId": _this.data.productId,
       "num": _this.data.num
     }
+    //console.log(_this.data.couponId)
     Api.previewOrder(data).then(res => {
      console.log(res)
       if (res.code == 2000) {
@@ -138,10 +148,9 @@ Page({
         num: arr[index].num,
         productInfoList: arr
       })
-      _this.getData();
-      
-      _this.getData1()
     }
+    _this.getData();
+    _this.getData1();
   },
 
  
@@ -173,6 +182,16 @@ Page({
   paymentClick(){
     let _this = this;
 
+    if(_this.data.select == 0){
+      if (!_this.data.isGetAddress){
+        wx.showToast({
+          title: '请填写默认地址',
+          icon: "none",
+        })
+        return;
+      }
+    }
+
     if (_this.data.infoOrder.priceModel.finalMoney == 0){
       _this.setData({
         index: 0,
@@ -193,8 +212,9 @@ Page({
       "num": _this.data.num,
       "payType": _this.data.payType[_this.data.index],
       "needInvoice": false, //是否需要发票
-      remarks: _this.data.remarks
+      "remarks": _this.data.remarks
     }
+    console.log(data)
     //console.log(_this.data.infoOrder.priceModel.canUseRemainPay)
    // console.log(_this.data.infoOrder.priceModel.financeRemain)
     if(_this.data.index == 1){  //余额支付
@@ -331,13 +351,6 @@ Page({
   onShow: function () {
     let _this = this;
     _this.getAddressData()
-    if(_this.data.select == 1){
-      //默认是到点自取
-      _this.setData({
-        deliveryType: ["ZT"],
-        arrays: ['到店自提'],
-      })
-    }
     try {
       var value = wx.getStorageSync('store')
       if (value) {
@@ -373,7 +386,28 @@ Page({
 
     _this.getData();
 
-    _this.getData1()
+    _this.getData1();
+    if (_this.data.select == 1) {
+      //默认是到点自取
+      _this.setData({
+        deliveryType: ["ZT"],
+        arrays: ['到店自提'],
+      })
+    } else {
+      //默认是到点自取
+      //console.log(1111)
+      if (_this.data.addressDetailList[0].city == _this.data.userInfo.city) {
+        _this.setData({
+          deliveryType: ['POST', 'YPS'],
+          arrays: ['快递', '壹配送'],
+        })
+      } else {
+        _this.setData({
+          deliveryType: ['POST'],
+          arrays: ['快递'],
+        })
+      }
+    }
   },
 
   /**

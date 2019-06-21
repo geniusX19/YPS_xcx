@@ -20,8 +20,8 @@
       <view class='product_price' wx:if='{{loadFlag == "product"}}'>
         <view class='content'>
           <view style='display:flex;flex-direction: row;justify-content: center;align-items: center;'>
-            <image style='width: 44rpx;height: 30rpx;' src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/sort/%E4%BC%9A%E5%91%98%402x.png'></image>
-            <text style='font-size:40rpx;color:#F57500;'>￥{{product.memberPrice}}</text>
+            <image wx:if="{{product.enableMemberPrice}}" style='width: 44rpx;height: 30rpx;' src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/sort/%E4%BC%9A%E5%91%98%402x.png'></image>
+            <text style='font-size:40rpx;color:#F57500;'>￥{{product.enableMemberPrice ? product.memberPrice : product.price}}</text>
           </view>
           <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/product/%E5%9B%BE%E5%B1%82%20158%402x.png' bindtap="share"></image>
         </view>
@@ -80,7 +80,7 @@
     </view>
     <!-- 拼团模块 -->
     <view style='margin-bottom:30rpx;'>
-      <view class='spell-list-tab'>
+      <view class='spell-list-tab' wx:if="{{spellteam.length > 0}}">
         <text>{{numTotal}}人在拼单,可直接参与</text>
         <view class='spell-list-tab-all' catchtap='showSpellListClick'>
           <text>查看全部</text>

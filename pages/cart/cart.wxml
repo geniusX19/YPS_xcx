@@ -21,15 +21,16 @@
         <view class='cart_content'>
           <view class='cart_content_tit'>
             <view>{{item.title}}{{item.sellOuted?'（已售罄）':''}}</view>
-            <image catchtap='deleteCart' data-id='{{item.cartItemId}}' src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/cart/%E5%9B%BE%E5%B1%82%20154%402x.png'></image>
+            <image catchtap='deleteCart' data-index='{{index}}' data-id='{{item.cartItemId}}' src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/cart/%E5%9B%BE%E5%B1%82%20154%402x.png'></image>
           </view>
           <view class='cart_content_price'>
-            <view style='font-size:30rpx;color:#E05E2C'>￥{{item.enableMemberPrice?item.memberPrice:item.price}}</view>
+            <!-- <view style='font-size:30rpx;color:#E05E2C'>￥{{item.enableMemberPrice?item.memberPrice:item.price}}</view> -->
+            <view style='font-size:30rpx;color:#E05E2C'>￥{{item.price}}</view>
             <!-- <view style='font-size:25rpx;color:#999999;text-decoration: line-through;' wx:if='{{item.memberPrice != ""}}'>￥{{item.price}}</view> -->
             <view class='cart_content_operation'>
-              <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/cart/delete.png' catchtap='deleteCartNum' data-id='{{item.goodsId}}'></image>
+              <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/cart/delete.png' catchtap='deleteCartNum' data-index='{{index}}' data-id='{{item.goodsId}}'></image>
               <text>{{item.num}}</text>
-              <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/index/%E5%9C%86%E8%A7%92%E7%9F%A9%E5%BD%A2%206%20%E6%8B%B7%E8%B4%9D%402x.png' catchtap='addCartNum' data-id='{{item.goodsId}}'></image>
+              <image src='https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/index/%E5%9C%86%E8%A7%92%E7%9F%A9%E5%BD%A2%206%20%E6%8B%B7%E8%B4%9D%402x.png' catchtap='addCartNum' data-index='{{index}}' data-id='{{item.goodsId}}'></image>
             </view>
           </view>
         </view>

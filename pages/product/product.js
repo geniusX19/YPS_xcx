@@ -37,10 +37,11 @@ Page({
     userInfo: {}, //用户信息
     portrait_temp: null, //头像
     wxName: null, //昵称
+    _productImg: null, //商品图片
     bgPath: '/imgs/background.png', //背景
     qrcode_temp: '/imgs/qr.png', //二维码
-    windowWidth: null, //图片宽度
-    windowHeight: 1334, //图片高度
+    windowWidth: 320,
+    windowHeight: 560,
   },
 
   /**
@@ -51,9 +52,36 @@ Page({
     _this.setData({
       navH: app.globalData.navHeight, // 获取顶部导航栏高度
       userInfo: app.globalData.userInfo,
-      windowWidth: wx.getSystemInfoSync().windowWidth,
-      windowHeight: wx.getSystemInfoSync().windowHeight,
+      // windowWidth: wx.getSystemInfoSync().windowWidth,
+      // windowHeight: wx.getSystemInfoSync().windowHeight,
     })
+
+    // 获取头像到本地 ，做分享绘制图片用（网络图片无法绘制）
+    wx.downloadFile({
+      url: _this.data.userInfo.avatarUrl,
+      success(res) {
+        if (res.statusCode === 200) {
+          console.log("=====看看头像图片下载到本地打印的是啥???======")
+          console.log(res)
+          let image = res.tempFilePath
+          console.log(image)
+          _this.setData({
+            portrait_temp: image
+          })
+        }
+      }
+    })
+
+
+    wx.getSystemInfo({
+      success(res) {
+        // _this.setData({
+        //   windowWidth:res.windowWidth,
+        //   windowHeight:res.windowHeight,
+        // })
+      }
+    })
+
 
     wx.showShareMenu({
       withShareTicket: true
@@ -110,6 +138,7 @@ Page({
    */
   onShow: function () {
     var _this = this;
+    console.log(_this.data.loadFlag)
     if (_this.data.loadFlag == 'product') {
       this.buttom = this.selectComponent('#buttom'); // 页面初次渲染完成后，使用选择器选择组件实例节点，返回匹配到组件实例对象
       let myComponent = this.buttom;
@@ -128,15 +157,13 @@ Page({
         console.log('执行商品查询');
         break;
     }
-
-    console.log("====获取用户信息=====")
-    console.log(_this.data.userInfo)
-    console.log(_this.data.userInfo.avatarUrl)
-    console.log(_this.data.userInfo.nickName)
-    console.log(_this.data.windowWidth)
-    console.log(_this.data.windowHeight)
-    console.log("====END=====")
-
+    // console.log("====获取用户信息=====")
+    // console.log(_this.data.userInfo)
+    // console.log(_this.data.userInfo.avatarUrl)
+    // console.log(_this.data.userInfo.nickName)
+    // console.log(_this.data.windowWidth)
+    // console.log(_this.data.windowHeight)
+    // console.log("====END=====")
     // 检索是否收藏该商品
     Api.searchCollection(_this.data.productId).then(res => {
       console.log(res);
@@ -146,6 +173,8 @@ Page({
         myComponent.settingCollection(); // 调用自定义组件中的方法
       }
     })
+    
+    _this.getQRcode();
   },
 
 
@@ -291,8 +320,20 @@ Page({
       console.log("商品信息", res);
       _this.setData({
         product: res.data,
-        productCarousel: JSON.parse(res.data.image)
+        productCarousel: JSON.parse(res.data.image),
       })
+
+      //下载商品图片到本地（网络图片canvas无法绘制）
+      wx.downloadFile({
+        url: JSON.parse(res.data.image)[0],
+        success: (res) => {
+          console.log("===========商品图片的请求地址长啥样????==============")
+          console.log(res)
+          _this.setData({
+            _productImg: res.tempFilePath
+          })
+        },
+      });
     })
   },
 
@@ -491,7 +532,7 @@ Page({
   shareImage(event) {
     var _this = this;
     _this.setData({
-      portrait_temp: _this.data.userInfo.avatarUrl,
+      // portrait_temp: _this.data.userInfo.avatarUrl,
       wxName: _this.data.userInfo.nickName,
       shareViewOpen: !_this.data.shareViewOpen
     })
@@ -501,47 +542,76 @@ Page({
     setTimeout(function () {
       _this.canvasToImage()
     }, 200)
+
+    console.log(_this.data.productCarousel)
   },
   drawImage() {
     var _this = this;
     //绘制canvas图片    
     const ctx = wx.createCanvasContext('myCanvas')
     var bgPath = _this.data.bgPath
-    var portraitPath = _this.data.portrait_temp
+    // var portraitPath = _this.data.portrait_temp
     var hostNickname = _this.data.wxName
+    var productImg = _this.data._productImg
+    var _spPrice = _this.data.product.price
+    var _spName = _this.data.product.title
 
     var qrPath = _this.data.qrcode_temp
-    var windowWidth = _this.data.windowWidth
+    var w = _this.data.windowWidth
+    var h = _this.data.windowHeight
     _this.setData({
-      scale: 1.2
+      scale: 1.78
     })
     //绘制背景图片
-    ctx.drawImage(bgPath, 0, 0, windowWidth, _this.data.scale * windowWidth)
+    ctx.drawImage(bgPath, w * 0.025, h * 0.025, w * 0.95, h * 0.95)
 
-    //绘制头像
+    //生成头像/logo     
     ctx.save()
-    ctx.beginPath()
-    ctx.arc(windowWidth / 2, 0.32 * windowWidth, 0.15 * windowWidth, 0, 2 * Math.PI)
+    ctx.arc(w * 0.2, h * 0.16, 35, 0, 2 * Math.PI)
+    ctx.setFillStyle('#AFAFAF') //AFAFAF
+    ctx.fill()
     ctx.clip()
-    ctx.drawImage(portraitPath, 0.7 * windowWidth / 2, 0.17 * windowWidth, 0.3 * windowWidth, 0.3 * windowWidth)
+    ctx.drawImage(_this.data.portrait_temp, w * 0.090, h * 0.096, 70, 70)
     ctx.restore()
-    //绘制第一段文本
-    ctx.setFillStyle('#000')
-    ctx.setFontSize(0.037 * windowWidth)
-    ctx.setTextAlign('center')
-    ctx.fillText(hostNickname + ' 正在参加疯狂红包活动', windowWidth / 2, 0.52 * windowWidth)
-    //绘制第二段文本
-    ctx.setFillStyle('red')
-    ctx.setFontSize(0.037 * windowWidth)
-    ctx.setTextAlign('center')
-    ctx.fillText('邀请你一起来领券抢红包啦~', windowWidth / 2, 0.57 * windowWidth)
+    console.log("=======-----------------------======" + _this.data.portrait_temp)
+    //生成用户ID 微信名
+    ctx.setFillStyle('#999999')
+    ctx.setFontSize(12)
+    ctx.setTextAlign('left')
+    ctx.fillText(hostNickname, w * 0.36, h * 0.14)
+    console.log("=======-----------------------======" + hostNickname)
+    // 文字
+    ctx.setFillStyle('#000000')
+    ctx.setFontSize(16)
+    ctx.setTextAlign('left')
+    ctx.fillText('喜欢的好物，分享给你', w * 0.36, h * 0.19)
+
+    //生成商品图片
+    ctx.drawImage(productImg, w * 0.1, h * 0.25, w * 0.8, h * 0.47)
+    console.log("=======-----------------------======" + productImg)
+
+    //商品名称
+    ctx.setFillStyle('#666666')
+    ctx.setFontSize(14)
+    ctx.setTextAlign('left')
+    ctx.fillText(_spName, w * 0.1, h * 0.78)
+    console.log("=======-----------------------======" + _spName)
+
+    //商品价格
+    ctx.setFillStyle('#41BA53')
+    ctx.setFontSize(24)
+    ctx.setTextAlign('left')
+    ctx.fillText("￥" + _spPrice, w * 0.1, h * 0.84)
+
     //绘制二维码
-    ctx.drawImage(qrPath, 0.64 * windowWidth / 2, 0.75 * windowWidth, 0.36 * windowWidth, 0.36 * windowWidth)
-    //绘制第三段文本
-    ctx.setFillStyle('green')
-    ctx.setFontSize(0.037 * windowWidth)
+    ctx.drawImage(qrPath, w * 0.615, h * 0.75, 80, 80)
+    console.log("=======-----------------------======" + qrPath)
+    //点击识别查看商品
+    ctx.setFillStyle('#666666')
+    ctx.setFontSize(12)
     ctx.setTextAlign('center')
-    ctx.fillText('长按二维码领红包', windowWidth / 2, 1.36 * windowWidth)
+    ctx.fillText('长按识别查看商品', w * 0.72, h * 0.92)
+
     ctx.draw();
   },
 
@@ -585,6 +655,52 @@ Page({
     _this.setData({
       popupSpell: false
     })
+  },
+
+  //获取二维码从后台
+  getQRcode: function () {
+    var _this = this;
+    var _data = {
+      goodsId: _this.options.id, //商品ID
+      scene: _this.options.flag, //从哪里进入详情 0=热销，1=拼团，2=秒杀，3=会员
+    } //自定义参数(用于扫码读取)
+
+    console.log("QRcode需要传给后台的参数======")
+    console.log(_data)
+    console.log("QRcode需要传给后台的参数====END==")
+
+    //生成小程序二维码分享
+    wx.request({
+      url: 'https://peter.xiaomiqiu.com/api/common/wx/create/mini/code',
+      data: _data,
+      header: {
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + wx.getStorageSync("third_Session").accessToken
+      },
+      method: 'POST',
+      success: (res) => {
+        console.log("==========QRcode")
+        console.log(res.data.data)
+
+        // 下载 ，做分享绘制图片用（网络图片无法绘制）
+        wx.downloadFile({
+          url: res.data.data,
+          success(res) {
+            if (res.statusCode === 200) {
+              console.log("=====看看QRcode下载到本地打印的是啥???======")
+              console.log(res)
+              let image = res.tempFilePath
+              console.log(image)
+
+              _this.setData({
+                qrcode_temp: image
+              })
+            }
+          }
+        })
+      },
+    });
+
   },
 
 })

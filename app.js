@@ -11,7 +11,7 @@ App({
     var logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs);
-    _this.loadCartNum();
+    
     // 获取用户信息
     wx.getSetting({
       success: res => {
@@ -27,6 +27,7 @@ App({
               if (_this.userInfoReadyCallback) {
                 _this.userInfoReadyCallback(res)
               }
+              _this.loadCartNum();
             }
           })
         } else {
@@ -45,7 +46,9 @@ App({
       fail(err) {
         console.log(err);
       }
-    })
+    });
+    //获取购物车信息
+    //_this.loadCartNum();
   },
 
   globalData: {
@@ -68,7 +71,7 @@ App({
     var _this = this;
     Api.searchCart().then(res => {
       console.log(res);
-      _this.globalData.shoppingData = _this.globalData.shoppingData + res.data.length;
+      _this.globalData.shoppingData = res.data.length;
       wx.setTabBarBadge({
         index: 2,
         text: "" + this.globalData.shoppingData + "", //可改 
@@ -132,6 +135,7 @@ App({
             wx.setStorageSync("third_Session", resp.data);
             Api.saveUserInfo(data).then(res => {
               console.log('保存用户信息', res);
+              _this.loadCartNum()
             })
           });
         } else {

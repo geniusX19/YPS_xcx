@@ -102,28 +102,9 @@ Page({
   },
 
   /**
-   * 加入购物车
-   */
-  // addCart: function () {
-  //   wx.showLoading({
-  //     title: '加载中！',
-  //   })
-  //   var _this = this;
-  //   let navbar = this.navbar;
-  //   app.addCart(1).then((res) => {
-  //     // navbar.cartNumUp();
-  //     console.log(res);
-  //     console.log(app.globalData.shoppingData)
-  //     wx.hideLoading();
-  //   })
-  // },
-  /**
    * 增加购物车
    */
   addCart: function (e) {
-    wx.showLoading({
-      title: '加载中！',
-    })
     var _this = this;
     var data = {
       goodsId: e.currentTarget.dataset.id,
@@ -135,7 +116,17 @@ Page({
       _this.setData({
         cartList: res
       })
-      wx.hideLoading();
+      wx.showLoading({
+        title: '正在加入购物车..',
+      });
+      setTimeout(() => {
+        wx.hideLoading();
+        wx.showToast({
+          title: '添加成功',
+          icon: 'success',
+        });
+      }, 1500);
+      
     })
   },
 

@@ -16,23 +16,15 @@ Page({
    */
   data: {
     navH: null, // 当前手机导航栏高度
-    loginShow: null, // 登录标识
-    canIUse: wx.canIUse('button.open-type.getUserInfo'), //判断小程序的API，回调，参数，组件等是否在当前版本可用
     chooseShop: false, // 选择门店
     store: null, // 默认门店
     storeList: [], // 门店列表
     carousels: [], // 首页轮播
     categoryList: [], // 分类列表
-    productList: [{
-      backgroungimg: 'https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/index/%E7%B2%AE%E6%B2%B9%E7%B1%B3%E9%9D%A2%402x.png',
-      dataTitle: '粮油米面',
-      productList: [{
-        productImg: 'https://yipeisong.oss-cn-hangzhou.aliyuncs.com/wanken/index/%E5%9B%BE%E5%B1%82%201423%402x.png',
-        productTitle: '【有机认证】中国农垦 北大荒',
-        member: '36.00',
-        price: '48.00'
-      }],
-    }],
+    page: 1, //分页
+    size: 10, //展示数量  
+    totalPages: 0, //总分页
+    productList: [], //商品列表
     queryContent: {},
     getQuery: null, //首页搜索值
   },
@@ -52,11 +44,8 @@ Page({
    */
   onReady: function () {
     var _this = this;
-    _this.checkLogin();
-    _this.loadData(); // 加载首页商品数据
-    _this.loadCarousel(); // 加载首页轮播数据
-    _this.loadCategory(); // 加载分类
-    _this.loadShopaddress(); // 加载商户门店
+    //_this.checkLogin();
+    
   },
 
   /**
@@ -69,7 +58,10 @@ Page({
       index: 2,
       text: "" + app.globalData.shoppingData + "", //可改 
     });
-
+    _this.setData({
+      page: 1,
+      productList: [],
+    })
     console.log(typeof (wx.getStorageSync('storeIndex')))
     if (wx.getStorageSync('storeIndex') != '') {
       console.log('FUCK!')
@@ -77,6 +69,23 @@ Page({
         store: wx.getStorageSync('storeIndex').addressDetail
       })
     }
+    wx.checkSession({
+      success: function (res) {
+        // console.log("未过期");
+        _this.loadCarousel(); // 加载首页轮播数据
+        _this.loadData(); // 加载首页商品数据
+        _this.loadCategory(); // 加载分类
+        _this.loadShopaddress(); // 加载商户门店
+      },
+      fail: function (res) {
+        console.log("index.js-onLoad-需要登录");
+        wx.navigateTo({
+          url: '/pages/logs/logs',
+        });
+        return;
+      }
+    })
+    
   },
 
   /**
@@ -104,7 +113,12 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
-
+    let _this = this;
+    if(_this.data.page < _this.data.totalPages){
+        _this.setData({
+          page: _this.data.page + 1,
+        })
+    }
   },
 
   /**
@@ -130,8 +144,11 @@ Page({
         console.log(res);
       },
       fail: function (res) {
+        wx.navigateTo({
+          url: '/pages/logs/logs',
+        })
         app.globalData.loginStatus = false;
-        console.log("需要登录！！！！！！！！！！！！！！");
+        //console.log("需要登录！！！！！！！！！！！！！！");
         _this.setData({
           loginShow: app.globalData.loginStatus
         })
@@ -149,9 +166,11 @@ Page({
   loadCarousel: function () {
     var _this = this;
     Api.loadIndexCarousel().then(res => {
-      _this.setData({
-        carousels: res.data
-      })
+      if (res.code === 2000){
+        _this.setData({
+          carousels: res.data
+        })
+      }
     })
   },
 
@@ -172,10 +191,11 @@ Page({
    */
   loadData: function () {
     var _this = this;
-    Api.loadIndexData(1, 10).then(res => {
+    Api.loadIndexData(_this.data.page, _this.data.size).then(res => {
       console.log(res);
       _this.setData({
-        productList: res.data.dataList
+        productList: _this.data.productList.concat(res.data.dataList),
+        totalPages: res.data.totalPages
       })
     })
   },
@@ -186,7 +206,7 @@ Page({
   togoods: function (e) {
     var _this = this;
     wx.navigateTo({
-      url: e.currentTarget.dataset.title + '?id=' + e.currentTarget.dataset.title,
+      url: e.currentTarget.dataset.url,
     })
   },
 
@@ -242,31 +262,7 @@ Page({
       wx.hideLoading();
     })
   },
-  /**
-   * 获取用户信息
-   */
-  getUserInfo: function (e) {
-    var that = this;
-    console.log(e.detail);
-    that.setData({
-      userInfo: e.detail.userInfo,
-      loginShow: true
-    })
-    app.globalData.userInfo = e.detail.userInfo;
-    wx.showTabBar({
-      aniamtion: true,
-    })
-    console.log(app.globalData.userInfo);
-    var data = {
-      "nickName": app.globalData.userInfo.nickName,
-      "avatarUrl": app.globalData.userInfo.avatarUrl,
-      "gender": app.globalData.userInfo.gender,
-      "province": app.globalData.userInfo.province,
-      "city": app.globalData.userInfo.city,
-      "country": app.globalData.userInfo.country
-    }
-    app.userLogin(data);
-  },
+  
 
   /**
    * 前往拼团

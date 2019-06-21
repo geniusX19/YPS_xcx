@@ -63,12 +63,17 @@ Page({
    */
   onShow: function () {
     var _this = this;
+    _this.setData({
+      cartList: [],
+      allSelect: false,
+      totalMoney: 0,
+    })
     _this.loadCart();
     // 购物车商品数量展示
-    wx.setTabBarBadge({
-      index: 2,
-      text: "" + app.globalData.shoppingData + "", //可改 
-    });
+    // wx.setTabBarBadge({
+    //   index: 2,
+    //   text: "" + app.globalData.shoppingData + "", //可改 
+    // });
   },
 
   /**
@@ -115,7 +120,8 @@ Page({
       console.log(res);
       if(res.data.length == 0){
         _this.setData({
-          isHide: true
+          isHide: true,
+          cartList: [],
         })
       }else{
         _this.setData({
@@ -123,6 +129,11 @@ Page({
           isHide: false
         })
       }
+      app.globalData.shoppingData = res.data.length;
+      wx.setTabBarBadge({
+        index: 2,
+        text: "" + app.globalData.shoppingData + "", //可改 
+      });
     })
   },
 
@@ -146,6 +157,7 @@ Page({
         cartList: _this.data.cartList
       })
     }
+    _this.isSelectAll();
     _this.priceCount();
   },
 
@@ -190,68 +202,99 @@ Page({
   },
 
   /**
+   * 是否全选
+   * 
+   */
+
+  isSelectAll(){
+    let _this = this;
+    let isSelect = _this.data.cartList.find(function (item, index) {
+      return item.select == undefined || item.select == false;
+    })
+    console.log(isSelect)
+    if (isSelect == undefined) {
+      _this.setData({
+        allSelect: true,
+      })
+    } else {
+      _this.setData({
+        allSelect: false,
+      })
+    }
+  },
+
+  /**
    * 增加购物车
    */
   addCartNum: function (e) {
-    wx.showLoading({
-      title: '加载中！',
-    })
+    
     var _this = this;
+    let index = e.currentTarget.dataset.index;
+    let cartList = _this.data.cartList;
     var data = {
       goodsId: e.currentTarget.dataset.id,
       num: 1
     };
-    app.addCart(data).then((res) => {
-      //_this.priceCount();
-      console.log(res);
+    Api.addCart(data).then((res) => {
+      cartList[index].num = cartList[index].num + 1;
+      cartList[index].totalPrice = cartList[index].num * cartList[index].price;
       _this.setData({
-        cartList: res
+        cartList: cartList,
       })
-      wx.hideLoading();
+      //计算总价
+      _this.priceCount();
     })
   },
   /**
    * 减少购物车
    */
   deleteCartNum: function (e) {
-    wx.showLoading({
-      title: '加载中！',
-    })
+    // wx.showLoading({
+    //   title: '加载中！',
+    // })
     var _this = this;
-    var data = {
-      goodsId: e.currentTarget.dataset.id,
-      num: -1
-    };
-    app.deleteCart(data).then((res) => {
-      //_this.priceCount();
+    let index = e.currentTarget.dataset.index;
+    let cartList = _this.data.cartList;
+    console.log(cartList[index].num)
+    if (cartList[index].num <= 1){
+      cartList[index].num = 1;
       _this.setData({
-        cartList: res
+        cartList: cartList,
       })
-      wx.hideLoading();
-    })
+    }else{
+      var data = {
+        goodsId: e.currentTarget.dataset.id,
+        num: -1,
+      };
+      //修改数据
+      Api.addCart(data).then((res) => {
+        console.log(res)
+        cartList[index].num = cartList[index].num - 1;
+        cartList[index].totalPrice = cartList[index].num * cartList[index].price;
+        _this.setData({
+          cartList: cartList,
+        })
+        //计算总价
+        _this.priceCount();
+      })
+    }
   },
 
   /**
    * 计算总价
    */
   priceCount:function(){
-    this.data.totalMoney = 0;
-    console.log(this.data.select , this.data.allSelect)
-    if (!this.data.select) {
-      console.log("我走不聊！");
-      return;
-    }
-    console.log("我来了");
+    let totalMoney = 0;
+    console.log(this.data.cartList)
     for (var i = 0; i < this.data.cartList.length; i++) {
       if (this.data.cartList[i].select) {
-        this.data.totalMoney = this.data.totalMoney + this.data.cartList[i].totalPrice;
-        console.log(this.data.totalMoney);
+        totalMoney += this.data.cartList[i].totalPrice;
         this.setData({
-          totalMoney: this.data.totalMoney,
+          totalMoney: totalMoney,
         })
       }
-      console.log(this.data.totalMoney)
     }
+    console.log(this.data.totalMoney)
   },
 
   /**
@@ -260,13 +303,21 @@ Page({
   deleteCart:function(e){
     var _this = this;
     var ids = [e.currentTarget.dataset.id];
+    var index = e.currentTarget.dataset.index;
     Api.delectCart({ids:ids.join(',')}).then(res => {
       console.log(res);
-      _this.loadCart();
-      // app.deleteCart(1).then(res => {
-      //   console.log('数量减',res);
-        
-      // })
+      if (res.code == 2000){
+        let cartList = _this.data.cartList;
+        cartList.splice(index,1)
+        _this.setData({
+          cartList: cartList,
+        })
+        app.globalData.shoppingData = cartList.length;
+        wx.setTabBarBadge({
+          index: 2,
+          text: "" + app.globalData.shoppingData + "", //可改 
+        });
+      }
     })
   },
 

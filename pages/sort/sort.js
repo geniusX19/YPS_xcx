@@ -32,7 +32,6 @@ Page({
    */
   onLoad: function(options) {
     let _this = this;
-    
   },
 
   /**
@@ -71,7 +70,6 @@ Page({
    * 生命周期函数--监听页面隐藏
    */
   onHide: function() {
-
   },
 
   /**
@@ -132,7 +130,7 @@ Page({
    */
   loadCategory:function(data){
     var _this = this;
-    //console.log(data);
+    console.log(data);
     Api.loadCategory(data,_this.data.page,_this.data.size).then(res => {
       //console.log(res);
       if(_this.data.inputSearch){
@@ -142,6 +140,7 @@ Page({
         })
       }else{
         if (res.data.dataList.length > 0){
+          console.log(res.data.dataList)
           _this.setData({
             //productList: [],
             productList: _this.data.productList.concat(res.data.dataList),
@@ -169,7 +168,8 @@ Page({
       return;
     }else{
       _this.setData({
-        inputSearch: true
+        inputSearch: true,
+        productLists:[]
       })
       var data = {
         "categoryId": '',
@@ -272,20 +272,22 @@ Page({
   formIndexByQuery:function(){
     var _this = this;
     console.log(app.globalData.queryData)
-    if(app.globalData.queryData != undefined){
+    if(app.globalData.queryData != undefined){  //首页搜索进来的
+      //console.log(11)
       _this.setData({
         _formIndexContent:app.globalData.queryData.queryContent,
         _formIndexByQuery:true,
         inputSearch:true
-      })
-    }
-    var _data ={
-      "categoryId": '',
-      "title": _this.data._formIndexContent,
-      "isDel": false,
-      "sort": "desc"
-    }
+      });
 
-    _this.loadCategory(_data);
+      var _data = {
+        "categoryId": '',
+        "title": _this.data._formIndexContent,
+        "isDel": false,
+        "sort": "desc"
+      }
+      _this.loadCategory(_data);
+    }
+    
   }
 })
